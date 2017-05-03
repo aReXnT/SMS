@@ -5,25 +5,47 @@
 
         <SwitchPreference
             android:title="自动复制验证码"
-            android:key="autoCopyCaptcha"
+            android:key="auto_copy_captcha"
             android:defaultValue="true"
             android:summaryOn="开"
             android:summaryOff="关"/>
 
         <SwitchPreference
-            android:title="默认打开通知栏卡片"
-            android:key="autoCopyCaptcha"
+            android:title="启用流量卡片"
+            android:key="enable_data_cardview"
+            android:defaultValue="true"
+            android:summaryOn="开"
+            android:summaryOff="关"/>
+
+        <SwitchPreference
+            android:title="启用快递卡片"
+            android:key="enable_express_cardview"
             android:defaultValue="true"
             android:summaryOn="开"
             android:summaryOff="关"/>
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="解析验证码">
+
+        <EditTextPreference
+            android:title="关键字"
+            android:defaultValue="123"
+            android:key="msg_keyword" />
+
+        <EditTextPreference/>
+
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="自定义卡片">
+        <SwitchPreference
+            android:title="启用"
+            android:key="enable_custom_card"
+            android:defaultValue="false"/>
         <EditTextPreference
             android:title="自定匹配标题"
             android:key="customTitle1RF"
             android:summary="提供关键字用于匹配短信"
             android:defaultValue="@string/customTitle1"/>
-
     </PreferenceCategory>
+
 </PreferenceScreen>

@@ -7,8 +7,6 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
-
-
     <application
         android:name=".SMSApp"
         android:allowBackup="true"

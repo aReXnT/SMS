@@ -59,8 +59,8 @@ public class ConversationFragment extends Fragment implements LoaderManager.Load
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.conversation_list, container, false);
-        mDataHeader = inflater.inflate(R.layout.data_head_view, container ,false);
-        mExpressHeader = inflater.inflate(R.layout.express_header_view, container ,false);
+        mDataHeader = inflater.inflate(R.layout.header_view_data, container ,false);
+        mExpressHeader = inflater.inflate(R.layout.header_view_express, container ,false);
         mRecyclerView = (RecyclerView) view;
         mContext = SMSApp.getContext();
         mPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);

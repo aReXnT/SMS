@@ -14,4 +14,5 @@ public class SettingActivity extends PreferenceActivity implements SharedPrefere
 
 
     }
+
 }
