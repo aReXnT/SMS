@@ -5,15 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.widget.Toast;
+import android.util.Log;
 
 import com.arexnt.sms.R;
-import com.arexnt.sms.SMSApp;
 import com.arexnt.sms.model.Message;
+import com.arexnt.sms.utils.ClipboardUtils;
+import com.arexnt.sms.utils.ToastUtils;
 
-/**
- * Created by arexnt on 2017/5/2.
- */
 
 public class ToastService extends Service {
 
@@ -23,18 +21,21 @@ public class ToastService extends Service {
         return null;
     }
 
-
-
     @Override
     public int onStartCommand(Intent intent,  int flags, int startId) {
         if (intent != null){
             Bundle bundle = intent.getBundleExtra("bundle");
             Message message = (Message) bundle.getSerializable("message");
 
-            if (message.getCaptchas() != null || !message.getCaptchas().isEmpty()){
-                Toast.makeText(SMSApp.getContext(),
-                        String.format(getResources().getString(R.string.copy_captcha), message.getCaptchas()),
-                        Toast.LENGTH_SHORT);
+            Log.d("pastCaptcha",message.getCaptchas());
+
+            if (message.getCaptchas() != null){
+                Log.d("makeToast","yes");
+//                Toast.makeText(SMSApp.getContext(),
+//                        String.format(getResources().getString(R.string.copy_captcha), message.getCaptchas()),
+//                        Toast.LENGTH_SHORT);
+                ClipboardUtils.putTextIntoClipboard(ToastService.this, message.getCaptchas());
+                ToastUtils.showLong(String.format(getResources().getString(R.string.copy_captcha), message.getCaptchas()));
             }
         }
         return START_STICKY;

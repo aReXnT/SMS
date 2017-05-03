@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="全局">
+
+        <SwitchPreference
+            android:title="自动复制验证码"
+            android:key="autoCopyCaptcha"
+            android:defaultValue="true"
+            android:summaryOn="开"
+            android:summaryOff="关"/>
+
+        <SwitchPreference
+            android:title="默认打开通知栏卡片"
+            android:key="autoCopyCaptcha"
+            android:defaultValue="true"
+            android:summaryOn="开"
+            android:summaryOff="关"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="自定义卡片">
+        <EditTextPreference
+            android:title="自定匹配标题"
+            android:key="customTitle1RF"
+            android:summary="提供关键字用于匹配短信"
+            android:defaultValue="@string/customTitle1"/>
+
+    </PreferenceCategory>
+</PreferenceScreen>

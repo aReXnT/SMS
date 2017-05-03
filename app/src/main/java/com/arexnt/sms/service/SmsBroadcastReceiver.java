@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
+import android.util.Log;
 
 import com.arexnt.sms.common.SettingFragment;
 import com.arexnt.sms.model.Message;
@@ -14,9 +15,6 @@ import com.arexnt.sms.utils.StringUtils;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * Created by arexnt on 2017/5/2.
- */
 
 public class SmsBroadcastReceiver extends BroadcastReceiver{
 
@@ -30,6 +28,7 @@ public class SmsBroadcastReceiver extends BroadcastReceiver{
             SmsMessage message = SmsMessage.createFromPdu(sms);
             //获取短信内容
             final String content = message.getMessageBody();
+            Log.d("msgFromReceiver", content);
             //获取发送时间
             final Date date = new Date(message.getTimestampMillis());
             final String sender = message.getOriginatingAddress();
@@ -76,7 +75,7 @@ public class SmsBroadcastReceiver extends BroadcastReceiver{
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("message", smsMessage);
                     mIntent.putExtra("bundle", bundle);
-                    context.startService(intent);
+                    context.startService(mIntent);
                 }
             }
         }
