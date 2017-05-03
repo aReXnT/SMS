@@ -1,0 +1,60 @@
+<resources>
+
+    <!--&lt;!&ndash; Base application theme. &ndash;&gt;-->
+    <!--<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">-->
+        <!--&lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+        <!--<item name="colorPrimary">@color/colorPrimary</item>-->
+        <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
+        <!--<item name="colorAccent">@color/colorAccent</item>-->
+    <!--</style>-->
+
+    <!--<style name="AppTheme.NoActionBar">-->
+        <!--<item name="windowActionBar">false</item>-->
+        <!--<item name="windowNoTitle">true</item>-->
+    <!--</style>-->
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
+        <!--<item name="colorPrimary">#3F51B5</item>-->
+        <!--<item name="colorPrimaryDark">#3949AB</item>-->
+        <!--<item name="colorAccent">#00B0FF</item>-->
+        <!---->
+        <item name="colorPrimary">@color/grey_material</item>
+        <item name="colorPrimaryDark">@color/md_blue_grey_700</item>
+        <item name="colorAccent">@color/md_lime_200</item>
+
+
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+
+    </style>
+    <style name="MyAppTheme" parent="AppTheme.Base"></style>
+
+    <style name="TextPrimary">
+        <item name="android:textColor">@color/theme_light_text_primary</item>
+        <item name="android:textSize">16sp</item>
+        <item name="type">primary</item>
+    </style>
+
+    <style name="TextSecondary">
+        <item name="android:textColor">@color/theme_light_text_secondary</item>
+        <item name="android:textSize">14sp</item>
+        <item name="type">secondary</item>
+    </style>
+
+    <style name="TextTertiary">
+        <item name="android:textColor">@color/theme_light_text_secondary</item>
+        <item name="android:textSize">12sp</item>
+        <item name="type">tertiary</item>
+    </style>
+
+    <style name="TextQuaternary">
+        <item name="android:textColor">@color/theme_light_text_secondary</item>
+        <item name="android:textSize">10sp</item>
+        <item name="type">quaternary</item>
+    </style>
+</resources>

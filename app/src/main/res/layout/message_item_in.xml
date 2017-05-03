@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+    <android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/dp_10"
+        >
+
+        <TextView
+            android:id="@+id/in_message_time"
+            style="@style/TextTertiary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="18dp"
+            android:layout_marginBottom="@dimen/dp_4"
+            android:layout_gravity="left"
+            android:background="@drawable/time_background"
+            android:text="10:00"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+        <TextView
+            android:id="@+id/in_message_content"
+            style="@style/TextPrimary"
+            android:layout_width="wrap_content"
+            android:maxWidth="280dp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_10"
+            android:layout_marginBottom="@dimen/dp_10"
+            android:layout_marginLeft="18dp"
+            android:gravity="center_vertical"
+            android:background="@drawable/message_in"
+            android:text="温馨提示：截止02月30日24时，您当前月累计使用流量2.333GB。其中：【省内流量】已使用666.66MB。点击进入 http://wap.10010.com 查询详情。"
+            android:autoLink="all"
+            android:linksClickable="true"
+            app:layout_constraintTop_toBottomOf="@+id/in_message_time"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+
+    </android.support.constraint.ConstraintLayout>
+</LinearLayout>
