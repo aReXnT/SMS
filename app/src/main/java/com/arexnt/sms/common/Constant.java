@@ -6,7 +6,7 @@ import android.net.Uri;
  * Created by arexnt on 2017/4/18.
  */
 
-public class SettingFragment {
+public class Constant {
     //SharePreference
     public static final String PERSONAL_SENDERS = "pref_key_personal_senders";
     public static final String BLOCKED_SENDERS = "pref_key_blocked_senders";

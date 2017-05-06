@@ -1,7 +1,7 @@
 package com.arexnt.sms.ui.captcha;
 
 import com.arexnt.sms.R;
-import com.arexnt.sms.common.SettingFragment;
+import com.arexnt.sms.common.Constant;
 import com.arexnt.sms.model.Message;
 import com.arexnt.sms.utils.StringUtils;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
@@ -17,14 +17,14 @@ public class CaptchasListAdapter extends BaseMultiItemQuickAdapter<Message, Base
 
     public CaptchasListAdapter(List<Message> messageList){
         super(messageList);
-        addItemType(SettingFragment.isCaptcha, R.layout.captcha_item);
-        addItemType(SettingFragment.isCaptcha_Sep, R.layout.captcha_separation);
+        addItemType(Constant.isCaptcha, R.layout.captcha_item);
+        addItemType(Constant.isCaptcha_Sep, R.layout.captcha_separation);
     }
 
     @Override
     protected void convert(BaseViewHolder helper, Message item) {
         switch (helper.getItemViewType()){
-            case SettingFragment.isCaptcha:
+            case Constant.isCaptcha:
                 helper.setText(R.id.captcha_addr, item.getSender());
                 helper.setText(R.id.captcha_date, item.getReceiveDate());
                 helper.setText(R.id.captcha_content, item.getContent());
@@ -51,7 +51,7 @@ public class CaptchasListAdapter extends BaseMultiItemQuickAdapter<Message, Base
                     helper.setText(R.id.avatar_tv, "...");
                 }
                 break;
-            case SettingFragment.isCaptcha_Sep:
+            case Constant.isCaptcha_Sep:
                 helper.setText(R.id.date_message_tv, item.getReceiveDate());
 
                 break;

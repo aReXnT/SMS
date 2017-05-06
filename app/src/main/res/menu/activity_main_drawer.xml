@@ -3,16 +3,17 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import"/>
-        <item
             android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery"/>
+            android:title="Gallery">
+            <item
+                android:id="@+id/cout_text"
+                android:title="123"
+                >
+
+            </item>
+        </item>
         <item
             android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
             android:title="Slideshow"/>
         <item
             android:id="@+id/nav_manage"
@@ -23,12 +24,12 @@
     <item android:title="Communicate">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
+                android:id="@+id/nav_setting"
+                android:icon="@drawable/ic_menu_setting"
                 android:title="Share"/>
             <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
+                android:id="@+id/nav_info"
+                android:icon="@drawable/ic_menu_info"
                 android:title="Send"/>
         </menu>
     </item>

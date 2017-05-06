@@ -6,22 +6,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white_med"
-    tools:context="com.arexnt.sms.ui.messagelist.MessageListActivity">
+    tools:context="com.arexnt.sms.ui.setting.SettingActivity">
+
     <android.support.v7.widget.Toolbar
-        android:id="@+id/message_toolbar"
+        android:fitsSystemWindows="true"
+        android:id="@+id/setting_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
         android:background="?attr/colorPrimary"
         android:elevation="@dimen/dp_4"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/Theme.AppCompat.Light"/>
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/list_message"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:listitem="@layout/message_item_in">
-    </android.support.v7.widget.RecyclerView>
+
+
+    <include layout="@layout/content_main2"/>
+
+
 
 </LinearLayout>

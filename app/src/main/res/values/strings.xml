@@ -5,6 +5,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">设置</string>
+    <string name="scale_down_show_behavior">com.arexnt.sms.ui.widget.ScaleDownBehavior</string>
 
     <string name="copy_captcha">验证码：%s 已复制到粘贴板。</string>
     <string name="personal_fragment">个人</string>
@@ -17,5 +18,12 @@
     <string name="express_card_title">菜鸟驿站取件提示</string>
     <string name="packet_code_title">提货码</string>
     <string name="self_packet_code_title">自提柜提货码</string>
+    <string name="title_activity_main2">设置</string>
+
+    <string name="sms_tigger_regex">(是|为|:|：| |G-|is|)+(:|：|G-|\[|【| |)</string>
+    <!--<string name="sms_captcha_regex">(?<[0-9a-zA-Z])([0-9a-zA-Z]{4,10})(?![0-9a-zA-Z])</string>-->
+
+
+
 
 </resources>

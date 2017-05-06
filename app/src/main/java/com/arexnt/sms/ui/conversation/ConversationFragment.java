@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,17 +21,23 @@ import android.view.ViewGroup;
 
 import com.arexnt.sms.R;
 import com.arexnt.sms.SMSApp;
-import com.arexnt.sms.common.SettingFragment;
+import com.arexnt.sms.common.Constant;
 import com.arexnt.sms.data.Conversation;
 import com.arexnt.sms.data.DataServer;
 import com.arexnt.sms.ui.messagelist.MessageListActivity;
 
 import java.util.List;
 
+import static com.arexnt.sms.common.Constant.CONVERSATIONS_CONTENT_PROVIDER;
+import static com.arexnt.sms.common.Constant.DEFAULT_SORT_ORDER;
+import static com.arexnt.sms.data.DataServer.ALL_THREADS_PROJECTION;
+
 public class ConversationFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String TAG = "ConversationFragment";
     public static final String ARG = "FragmentType";
+    public static final int mPersonalTag = 1;
+    public static final int mNotifTag = 2;
     private SharedPreferences mPreferences;
     private List<Conversation> mConversations;
     private ConversationListAdapter mAdapter;
@@ -64,16 +71,19 @@ public class ConversationFragment extends Fragment implements LoaderManager.Load
         mRecyclerView = (RecyclerView) view;
         mContext = SMSApp.getContext();
         mPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-        mDataServer = new DataServer(getContext(), mPreferences, mFragmentType);
-        mConversations = mDataServer.getConversation();
+//        mDataServer = new DataServer(getContext(), mPreferences, mFragmentType);
+//        mConversations = mDataServer.getConversation();
         init();
         setHeader();
+        mAdapter.setEmptyView(R.layout.loading_view, container);
+        getLoaderManager().initLoader(0, null, this);
         return view;
     }
 
     public void init(){
         //set up Adapter
-        mAdapter = new ConversationListAdapter(R.layout.conversation_item, mConversations);
+        mAdapter = new ConversationListAdapter(R.layout.conversation_item, null);
+
         mAdapter.openLoadAnimation();
         mAdapter.setOnItemClickListener( (adapter, view, position )-> {
                 Conversation conversation = (Conversation) adapter.getItem(position);
@@ -83,39 +93,47 @@ public class ConversationFragment extends Fragment implements LoaderManager.Load
                 MessageListActivity.launch(getContext(), id, addr);
         });
 
+
         //set up recyclerview
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
+//        mRecyclerView.addItemDecoration(new DividerItemDecoration(mRecyclerView.getContext(), DividerItemDecoration.VERTICAL));
     }
 
     public void setHeader(){
-        if (mFragmentType == SettingFragment.NOTIF_LIST) {
+        if (mFragmentType == Constant.NOTIF_LIST) {
             mAdapter.addHeaderView(mDataHeader);
             mAdapter.addHeaderView(mExpressHeader);
-            mDataHeader.setOnLongClickListener(getLongClikeListener());
-            mExpressHeader.setOnLongClickListener(getLongClikeListener());
-
+            mDataHeader.setOnLongClickListener(getCardLongClikeListener());
+            mExpressHeader.setOnLongClickListener(getCardLongClikeListener());
         }
 
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return null;
+        return new CursorLoader(getContext(),
+                CONVERSATIONS_CONTENT_PROVIDER,ALL_THREADS_PROJECTION,
+                null, null, DEFAULT_SORT_ORDER
+                );
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
+        mDataServer = new DataServer(getContext(), mPreferences, mFragmentType);
+        mConversations = mDataServer.getConversation();
+        mAdapter.setNewData(mConversations);
+//        mAdapter.notifyDataSetChanged();
+//        mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
+        mDataServer = null;
     }
 
-    private View.OnLongClickListener getLongClikeListener(){
+    private View.OnLongClickListener getCardLongClikeListener(){
 
         return v -> {
             Snackbar.make(v,"移除该卡片？",Snackbar.LENGTH_LONG)
@@ -128,10 +146,18 @@ public class ConversationFragment extends Fragment implements LoaderManager.Load
             };
 
     }
-    private View.OnClickListener getOnClikListener() {
+
+    private View.OnClickListener getCardOnClikListener() {
         return v -> mAdapter.removeHeaderView(v);
     }
 
+    public void scrollToTop(){
+        mRecyclerView.scrollToPosition(0);
+    }
+
+    public void smoothScrollToTop(){
+        mRecyclerView.smoothScrollToPosition(0);
+    }
 
 
 

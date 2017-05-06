@@ -19,7 +19,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.arexnt.sms.R;
-import com.arexnt.sms.common.SettingFragment;
+import com.arexnt.sms.common.Constant;
 import com.arexnt.sms.model.Message;
 import com.arexnt.sms.utils.DateFormatter;
 
@@ -72,7 +72,7 @@ public class MessageListActivity extends AppCompatActivity
         setContentView(R.layout.message_list);
         ButterKnife.bind(this);
         onNewIntent(getIntent());
-        getLoaderManager().initLoader(SettingFragment.LOADER_MESSAGES, null, this);
+        getLoaderManager().initLoader(Constant.LOADER_MESSAGES, null, this);
         initView();
     }
 
@@ -94,14 +94,14 @@ public class MessageListActivity extends AppCompatActivity
         setSupportActionBar(mMessageToolbar);
         mBar = getSupportActionBar();
         if (mBar != null){
-            getSupportActionBar().setTitle(mAddr);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            mBar.setTitle(mAddr);
+            mBar.setDisplayHomeAsUpEnabled(true);
         }
     }
 
     @Override
     public Loader onCreateLoader(int id, Bundle args) {
-        if (id == SettingFragment.LOADER_MESSAGES) {
+        if (id == Constant.LOADER_MESSAGES) {
             CursorLoader loader = new CursorLoader(getApplicationContext(),
                     Uri.withAppendedPath(MMS_SMS_CONTENT_PROVIDER, String.valueOf(mThreadId)),
                     PROJECTION, null, null, "date ASC"
@@ -114,7 +114,7 @@ public class MessageListActivity extends AppCompatActivity
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if (loader.getId() == SettingFragment.LOADER_MESSAGES) {
+        if (loader.getId() == Constant.LOADER_MESSAGES) {
             List<Message> messageList = new ArrayList<>();
             if (data.moveToFirst()) {
                 do{
@@ -132,10 +132,10 @@ public class MessageListActivity extends AppCompatActivity
                     String type = data.getString(data.getColumnIndexOrThrow("type"));
                     if (type != null || !type.isEmpty()){
                         if (type.equals("1")){
-                            message.setItemType(SettingFragment.isMessage_in);
+                            message.setItemType(Constant.isMessage_in);
                         }
                         if (type.equals("2")){
-                            message.setItemType(SettingFragment.isMessage_out);
+                            message.setItemType(Constant.isMessage_out);
                         }
                     }else {
                         continue;
@@ -145,8 +145,8 @@ public class MessageListActivity extends AppCompatActivity
                 }while (data.moveToNext());
             }
             mAdapter.setNewData(messageList);
-            mAdapter.notifyDataSetChanged();
-            mListMessage.setAdapter(mAdapter);
+//            mAdapter.notifyDataSetChanged();
+//            mListMessage.setAdapter(mAdapter);
 
             //测试用输出点开会话的每一条短信
 //            for(int i=0;i<messageList.size();i++){

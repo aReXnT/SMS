@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.arexnt.sms.R;
-import com.arexnt.sms.common.SettingFragment;
+import com.arexnt.sms.common.Constant;
 import com.arexnt.sms.model.Message;
 import com.arexnt.sms.utils.ClipboardUtils;
 import com.arexnt.sms.utils.SmsUtils;
@@ -28,7 +28,7 @@ import java.util.List;
 
 public class CaptchaListFragment extends Fragment implements CaptchasListAdapter.OnItemClickListener{
 
-    RecyclerView mRecyclerView;
+    private RecyclerView mRecyclerView;
     private List<Message> mMessages;
     private int mCurrentCaptchasCount = 0;
     private CaptchasListAdapter mAdapter;
@@ -98,7 +98,7 @@ public class CaptchaListFragment extends Fragment implements CaptchasListAdapter
     private int getMessageCount() {
         int amount = 0;
         for (Message message : mMessages) {
-            if (message.getItemType() == SettingFragment.isCaptcha) {
+            if (message.getItemType() == Constant.isCaptcha) {
                 amount += 1;
             }
         }
@@ -153,7 +153,7 @@ public class CaptchaListFragment extends Fragment implements CaptchasListAdapter
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        if (adapter.getItemViewType(position) != SettingFragment.isCaptcha_Sep){
+        if (adapter.getItemViewType(position) != Constant.isCaptcha_Sep){
             Message captcha = (Message) adapter.getItem(position);
             String captchaStr = captcha.getCaptchas();
             if(captchaStr != null ){
@@ -163,5 +163,13 @@ public class CaptchaListFragment extends Fragment implements CaptchasListAdapter
                         Snackbar.LENGTH_SHORT).show();
             }
         }
+    }
+
+    public void scrollToTop(){
+        mRecyclerView.scrollToPosition(0);
+    }
+
+    public void smoothScrollToTop(){
+        mRecyclerView.smoothScrollToPosition(0);
     }
 }

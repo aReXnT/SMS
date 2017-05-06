@@ -12,7 +12,7 @@ import android.util.Log;
 import android.util.SparseArray;
 
 import com.arexnt.sms.common.BlockedConversationHelper;
-import com.arexnt.sms.common.SettingFragment;
+import com.arexnt.sms.common.Constant;
 import com.arexnt.sms.utils.DateFormatter;
 
 import java.util.ArrayList;
@@ -21,9 +21,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import static com.arexnt.sms.common.SettingFragment.ADDRESSES_CONTENT_PROVIDER;
-import static com.arexnt.sms.common.SettingFragment.CONVERSATIONS_CONTENT_PROVIDER;
-import static com.arexnt.sms.common.SettingFragment.DEFAULT_SORT_ORDER;
+import static com.arexnt.sms.common.Constant.ADDRESSES_CONTENT_PROVIDER;
+import static com.arexnt.sms.common.Constant.CONVERSATIONS_CONTENT_PROVIDER;
+import static com.arexnt.sms.common.Constant.DEFAULT_SORT_ORDER;
 
 public class DataServer {
     private static final String TAG = "DataServer";
@@ -56,14 +56,14 @@ public class DataServer {
         ContentResolver contentResolver = mContext.getContentResolver();
         Cursor mCursor = null;
         switch (mConversationType){
-            case SettingFragment.PERSONAL_LIST:
+            case Constant.PERSONAL_LIST:
                 mCursor = contentResolver
                         .query( CONVERSATIONS_CONTENT_PROVIDER, ALL_THREADS_PROJECTION,
                                 helper.getCursorSelection(mPreferences, false),
                                 helper.getPersonalConversationArray(mPreferences),
                                 DEFAULT_SORT_ORDER);
                 break;
-            case SettingFragment.NOTIF_LIST:
+            case Constant.NOTIF_LIST:
                 mCursor = contentResolver
                         .query( CONVERSATIONS_CONTENT_PROVIDER, ALL_THREADS_PROJECTION,
                                 helper.getCursorSelection(mPreferences, true),
@@ -107,8 +107,13 @@ public class DataServer {
 
                     item.setChecked(false);
                     String addr = AddrRow.get((int)item.getRecipient_id());
-                    String name = getName(addr);
-                    item.setName(name);
+
+                    if(mConversationType.equals(Constant.PERSONAL_LIST)){
+                        String name = getName(addr);
+                        item.setName(name);
+                    }else {
+                        item.setName(addr);
+                    }
                     item.setAddress(addr);
                     list.add(item);
                 }while(mCursor.moveToNext());
@@ -163,10 +168,11 @@ public class DataServer {
     }
 
     private void filterConversation(){
-        Set<String> mNotifList = mPreferences.getStringSet(SettingFragment.NOTIF_SENDERS, new HashSet<String>());
-        Set<String> mPersonalList = mPreferences.getStringSet(SettingFragment.PERSONAL_SENDERS, new HashSet<String>());
-        Set<String> newNotifList = new HashSet<>(mNotifList);
-        Set<String> newPersonalList = new HashSet<>(mPersonalList);
+        Set<String> mNotifList = mPreferences.getStringSet(Constant.NOTIF_SENDERS, new HashSet<String>());
+        Set<String> mPersonalList = mPreferences.getStringSet(Constant.PERSONAL_SENDERS, new HashSet<String>());
+        Set<String> newNotifList = new HashSet<>();
+        Set<String> newPersonalList = new HashSet<>();
+
 
         String pattern = "((^106)+?|(^10010)+?|(^10086)+?).*$";
 
@@ -174,19 +180,19 @@ public class DataServer {
             int id = AddrRow.keyAt(i);
             String addr = AddrRow.get(id);
             if (Pattern.matches(pattern,addr)){
-                if (!newNotifList.contains(String.valueOf(id))){
-                    newNotifList.add(String.valueOf(id));
-                }
+                newNotifList.add(String.valueOf(id));
             }else {
-                if (!newPersonalList.contains(String.valueOf(id))){
-                    newPersonalList.add(String.valueOf(id));
-                }
+                newPersonalList.add(String.valueOf(id));
             }
         }
         SharedPreferences.Editor editor = mPreferences.edit();
         editor.clear();
-        editor.putStringSet(SettingFragment.NOTIF_SENDERS, newNotifList).commit();
-        editor.putStringSet(SettingFragment.PERSONAL_SENDERS, newPersonalList).commit();
+        if (!newNotifList.equals(mNotifList)){
+            editor.putStringSet(Constant.NOTIF_SENDERS, newNotifList).commit();
+        }
+        if (!newPersonalList.equals(mPersonalList)){
+            editor.putStringSet(Constant.PERSONAL_SENDERS, newPersonalList).commit();
+        }
     }
 
 

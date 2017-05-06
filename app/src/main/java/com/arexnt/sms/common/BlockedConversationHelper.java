@@ -43,15 +43,15 @@ public class BlockedConversationHelper {
 
 
     public Set<String> getPersonalConversations(SharedPreferences prefs ) {
-        return prefs.getStringSet(SettingFragment.PERSONAL_SENDERS, new HashSet<String>());
+        return prefs.getStringSet(Constant.PERSONAL_SENDERS, new HashSet<String>());
     }
 
     public Set<String> getNotifConversations(SharedPreferences prefs ) {
-        return prefs.getStringSet(SettingFragment.NOTIF_SENDERS, new HashSet<String>());
+        return prefs.getStringSet(Constant.NOTIF_SENDERS, new HashSet<String>());
     }
 
     public Set<String> getBlockedConversations(SharedPreferences prefs ) {
-        return prefs.getStringSet(SettingFragment.BLOCKED_SENDERS, new HashSet<String>());
+        return prefs.getStringSet(Constant.BLOCKED_SENDERS, new HashSet<String>());
     }
 
 

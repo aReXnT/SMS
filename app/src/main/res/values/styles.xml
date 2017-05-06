@@ -2,15 +2,15 @@
 
     <!--&lt;!&ndash; Base application theme. &ndash;&gt;-->
     <!--<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">-->
-        <!--&lt;!&ndash; Customize your theme here. &ndash;&gt;-->
-        <!--<item name="colorPrimary">@color/colorPrimary</item>-->
-        <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
-        <!--<item name="colorAccent">@color/colorAccent</item>-->
+    <!--&lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+    <!--<item name="colorPrimary">@color/colorPrimary</item>-->
+    <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
+    <!--<item name="colorAccent">@color/colorAccent</item>-->
     <!--</style>-->
 
     <!--<style name="AppTheme.NoActionBar">-->
-        <!--<item name="windowActionBar">false</item>-->
-        <!--<item name="windowNoTitle">true</item>-->
+    <!--<item name="windowActionBar">false</item>-->
+    <!--<item name="windowNoTitle">true</item>-->
     <!--</style>-->
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
@@ -22,17 +22,24 @@
         <!--<item name="colorPrimaryDark">#3949AB</item>-->
         <!--<item name="colorAccent">#00B0FF</item>-->
         <!---->
-        <item name="colorPrimary">@color/md_light_blue_500</item>
-        <item name="colorPrimaryDark">@color/md_light_blue_700</item>
+        <item name="colorPrimary">@color/md_light_blue_300</item>
+        <item name="colorPrimaryDark">@color/md_light_blue_500</item>
         <item name="colorAccent">@color/md_blue_grey_500</item>
 
+        <!--<item name="colorPrimary">@color/white_holo</item>-->
+        <!--<item name="colorPrimaryDark">@color/white_med</item>-->
+        <!--<item name="colorAccent">@color/md_light_blue_500</item>-->
 
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowTranslucentStatus">true</item>
 
     </style>
-    <style name="MyAppTheme" parent="AppTheme.Base"></style>
+
+    <style name="MyAppTheme" parent="AppTheme.Base">
+
+    </style>
+
 
     <style name="TextPrimary">
         <item name="android:textColor">@color/theme_light_text_primary</item>
@@ -57,4 +64,10 @@
         <item name="android:textSize">10sp</item>
         <item name="type">quaternary</item>
     </style>
+
+    <style name="MyAppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="MyAppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+
 </resources>

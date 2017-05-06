@@ -6,7 +6,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 
-import com.arexnt.sms.common.SettingFragment;
+import com.arexnt.sms.common.BlockedConversationHelper;
+import com.arexnt.sms.common.Constant;
 import com.arexnt.sms.model.Message;
 
 import org.litepal.crud.DataSupport;
@@ -35,6 +36,7 @@ public class SmsUtils {
     public List<Message> getAllCaptchMessages() {
         List<String> dateGroups = new ArrayList<>();
         ContentResolver contentResolver = mContext.getContentResolver();
+        BlockedConversationHelper helper = new BlockedConversationHelper(null);
         Cursor cursor = contentResolver.query(ALL_MESSAGE_URI, ALL_THREADS_PROJECTION,
                 null, null, "date desc");
         List<Message> smsMessages = new ArrayList<>();
@@ -79,7 +81,7 @@ public class SmsUtils {
                         int columnIndex = cursor.getColumnIndex("_id");
                         String smsId = cursor.getString(columnIndex);
 //                    message.setIsMessage(true);
-                        message.setItemType(SettingFragment.isCaptcha);
+                        message.setItemType(Constant.isCaptcha);
                         message.setDate(formatDate);
                         message.setSender(strAddress);
                         message.setThreadId(threadId);
@@ -103,7 +105,7 @@ public class SmsUtils {
         for (Message message : localMessages) {
             if (message.getDate() != null) {
 //                message.setIsMessage(true);
-                message.setItemType(SettingFragment.isCaptcha);
+                message.setItemType(Constant.isCaptcha);
                 boolean find = false;
                 for (int u = 0; u < smsMessages.size(); u++) {
                     if (message.getDate().getTime() > smsMessages.get(u).getDate().getTime()) {
@@ -130,7 +132,7 @@ public class SmsUtils {
                 Message dateMessage = new Message();
                 dateMessage.setReceiveDate(group);//每天短信的结构体中都包含一个设定不同分组的字符串
 //                dateMessage.setIsMessage(false);//标记为“不是短信”
-                dateMessage.setItemType(SettingFragment.isCaptcha_Sep);
+                dateMessage.setItemType(Constant.isCaptcha_Sep);
                 unionMessages.add(dateMessage);//插入到短信列表中，这是一个标签时间的元素，不是短信。
             } else {
                 if (!group.equals(dateGroups.get(dateGroups.size() - 1))) {
@@ -142,7 +144,7 @@ public class SmsUtils {
                     Message dateMessage = new Message();
                     dateMessage.setReceiveDate(group);
 //                    dateMessage.setIsMessage(false);
-                    dateMessage.setItemType(SettingFragment.isCaptcha_Sep);
+                    dateMessage.setItemType(Constant.isCaptcha_Sep);
                     unionMessages.add(dateMessage);
                 }
             }
