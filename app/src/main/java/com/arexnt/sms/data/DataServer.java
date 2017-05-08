@@ -36,12 +36,13 @@ public class DataServer {
     private Context mContext;
     private SharedPreferences mPreferences;
     private String mConversationType;
-    private SparseArray<String> AddrRow;
+    private SparseArray<String> mAddrRow;
 
     public DataServer(Context context, SharedPreferences preferences, String type){
         mContext = context;
         mPreferences = preferences;
         mConversationType = type;
+        mAddrRow = new SparseArray<>();
     }
     /**
      * get Conversation List and filter by given.
@@ -49,9 +50,9 @@ public class DataServer {
      */
     public  List<Conversation> getConversation(){
         List<Conversation> list = new ArrayList<>();
-        AddrRow = new SparseArray<>();
+        mAddrRow = new SparseArray<>();
         getAddress();
-        filterConversation();
+//        filterConversation();
         BlockedConversationHelper helper = new BlockedConversationHelper(null);
         ContentResolver contentResolver = mContext.getContentResolver();
         Cursor mCursor = null;
@@ -106,7 +107,7 @@ public class DataServer {
                     }
 
                     item.setChecked(false);
-                    String addr = AddrRow.get((int)item.getRecipient_id());
+                    String addr = mAddrRow.get((int)item.getRecipient_id());
 
                     if(mConversationType.equals(Constant.PERSONAL_LIST)){
                         String name = getName(addr);
@@ -145,7 +146,6 @@ public class DataServer {
         return name;
     }
     public void getAddress() {
-
         try{
             ContentResolver contentResolver = mContext.getContentResolver();
             Cursor AddrCursor = contentResolver.query(ADDRESSES_CONTENT_PROVIDER, null, null, null, null);
@@ -154,7 +154,7 @@ public class DataServer {
                 do{
                     int addrId = AddrCursor.getInt(AddrCursor.getColumnIndexOrThrow("_id"));
                     String addr = AddrCursor.getString(AddrCursor.getColumnIndexOrThrow("address"));
-                    AddrRow.put(addrId, addr);
+                    mAddrRow.put(addrId, addr);
                 }while (AddrCursor.moveToNext());
             }
 
@@ -162,37 +162,63 @@ public class DataServer {
         }catch (Exception e){
             e.printStackTrace();
         }
-        Log.d("AddrList",AddrRow.toString());
+        Log.d("AddrList",mAddrRow.toString());
 //        int mConversationHashCode = AddrRow.hashCode();
 //        Log.d("ConversationHashCode", String.valueOf(mConversationHashCode));
     }
 
-    private void filterConversation(){
+    public void filterConversation(){
         Set<String> mNotifList = mPreferences.getStringSet(Constant.NOTIF_SENDERS, new HashSet<String>());
         Set<String> mPersonalList = mPreferences.getStringSet(Constant.PERSONAL_SENDERS, new HashSet<String>());
         Set<String> newNotifList = new HashSet<>();
         Set<String> newPersonalList = new HashSet<>();
 
-
         String pattern = "((^106)+?|(^10010)+?|(^10086)+?).*$";
 
-        for(int i = 0; i < AddrRow.size(); i++){
-            int id = AddrRow.keyAt(i);
-            String addr = AddrRow.get(id);
+        for(int i = 0; i < mAddrRow.size(); i++){
+            int id = mAddrRow.keyAt(i);
+            String addr = mAddrRow.get(id);
             if (Pattern.matches(pattern,addr)){
                 newNotifList.add(String.valueOf(id));
             }else {
                 newPersonalList.add(String.valueOf(id));
             }
         }
-        SharedPreferences.Editor editor = mPreferences.edit();
-        editor.clear();
+
+
         if (!newNotifList.equals(mNotifList)){
-            editor.putStringSet(Constant.NOTIF_SENDERS, newNotifList).commit();
+//            SharedPreferences  preferences = PreferenceManager.getDefaultSharedPreferences(SMSApp.getContext());
+//            SharedPreferences.Editor editor = preferences.edit();
+//            editor.clear();
+//            editor.putStringSet(Constant.NOTIF_SENDERS, newNotifList).apply();
+            mPreferences.edit().putStringSet(Constant.NOTIF_SENDERS, newNotifList).commit();
         }
         if (!newPersonalList.equals(mPersonalList)){
-            editor.putStringSet(Constant.PERSONAL_SENDERS, newPersonalList).commit();
+//            SharedPreferences  preferences = PreferenceManager.getDefaultSharedPreferences(SMSApp.getContext());
+//            SharedPreferences.Editor editor = preferences.edit();
+//            editor.clear();
+//            editor.putStringSet(Constant.PERSONAL_SENDERS, newPersonalList).apply();
+            mPreferences.edit().putStringSet(Constant.PERSONAL_SENDERS, newPersonalList).commit();
         }
+
+    }
+
+    public String isContainSP(){
+        try{
+            ContentResolver contentResolver = mContext.getContentResolver();
+            Cursor mAddrCursor = contentResolver.query(ADDRESSES_CONTENT_PROVIDER, null,
+                    "address=?", new String[]{"10010"}, null);
+            String str = "";
+            if (mAddrCursor.moveToFirst()){
+                str = mAddrCursor.getString(mAddrCursor.getColumnIndex("_id"));
+            }
+            return str;
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

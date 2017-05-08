@@ -140,7 +140,7 @@ public class MessageListActivity extends AppCompatActivity
                     }else {
                         continue;
                     }
-                    Log.d("messageType", type);
+//                    Log.d("messageType", type);
                     messageList.add(message);
                 }while (data.moveToNext());
             }

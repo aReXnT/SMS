@@ -11,5 +11,5 @@ public interface StaticCaptchaCode {
             "激活代碼", "校驗代碼", "確認代碼", "動態代碼", "檢驗代碼", "上网密码"};
     String[] CPATCHAS_KEYWORD_EN = {"CODE", "code"};
 //    String ACTION_CLICK = "com.arexnt.sms.intent.action.NotificationClick";
-    String[] DATA_KEYWORD = {"已使用流量","","","","","","","","","","","","","","","","","",""};
+    String[] DATA_KEYWORD = {"总流量", "套餐内剩余流量", "结转流量", "结转剩余流量"};
 }

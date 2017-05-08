@@ -51,9 +51,9 @@
             android:key="custom_rg_title"
             android:summary="提供关键字用于匹配短信"
             android:defaultValue="@string/customTitle1"/>
-        <PreferenceScreen
-            android:key="custom_rg_option"
-            android:title="自定义选项">
+        <!--<PreferenceScreen-->
+            <!--android:key="custom_rg_option"-->
+            <!--android:title="自定义选项">-->
             <EditTextPreference
                 android:title="关键字"
                 android:key="custom_rg_keyword"
@@ -63,7 +63,7 @@
                 android:title="触发字"
                 android:key="custom_rg_trigger"
                 android:hint="(是|为|:|：|)+(:|：|\[|【|)"/>
-        </PreferenceScreen>
+        <!--</PreferenceScreen>-->
 
 
     </PreferenceCategory>

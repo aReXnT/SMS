@@ -34,7 +34,7 @@
                 android:layout_weight="1"
                 android:minWidth="16dp" />
             <TextView
-                android:id="@+id/header_date"
+                android:id="@+id/data_header_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2017年5月2日"
@@ -69,9 +69,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="本月已用流量"
+                    android:text="累计已用"
                     style="@style/TextQuaternary"/>
                 <TextView
+                    android:id="@+id/data1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0.0MB"
@@ -80,9 +81,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="本月已用流量"
+                    android:text="套餐内剩余"
                     style="@style/TextQuaternary"/>
                 <TextView
+                    android:id="@+id/data2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0.0MB"
@@ -90,20 +92,21 @@
                     />
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/section2"
                 android:layout_width="0dp"
                 android:minWidth="100dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:animateLayoutChanges="true"
                 android:orientation="vertical"
-                android:paddingTop="@dimen/dp_4"
-                android:visibility="gone">
+                android:paddingTop="@dimen/dp_4">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="本月已用流量"
+                    android:text="结转流量已用"
                     style="@style/TextQuaternary"/>
                 <TextView
+                    android:id="@+id/data3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0.0MB"
@@ -112,9 +115,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="本月已用流量"
+                    android:text="结转流量剩余"
                     style="@style/TextQuaternary"/>
                 <TextView
+                    android:id="@+id/data4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0.0MB"
@@ -123,4 +127,10 @@
             </LinearLayout>
         </LinearLayout>
    </LinearLayout>
+    <!--<RelativeLayout-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="bottom|right"-->
+        <!--android:padding="@dimen/dp_10">-->
+    <!--</RelativeLayout>-->
 </LinearLayout>

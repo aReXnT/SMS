@@ -24,10 +24,11 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 
 import com.arexnt.sms.common.Constant;
-import com.arexnt.sms.ui.setting.SettingActivity;
+import com.arexnt.sms.data.DataServer;
 import com.arexnt.sms.ui.base.SmsFragmentPagerAdapter;
 import com.arexnt.sms.ui.captcha.CaptchaListFragment;
 import com.arexnt.sms.ui.conversation.ConversationFragment;
+import com.arexnt.sms.ui.setting.SettingActivity;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionYes;
 
@@ -65,8 +66,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         getPermission();
-
-//        check();
+        check();
     }
 
     private void setupViewPager(ViewPager viewpager){
@@ -233,8 +233,14 @@ public class MainActivity extends AppCompatActivity
     @PermissionYes(100)
     private void getReadPermissions(List<String> grantedPermissions){
 //        Snackbar.make(mDrawerLayout,"获取权限成功",Snackbar.LENGTH_SHORT).show();
+        SharedPreferences mPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        DataServer dataServer = new DataServer(getApplicationContext(), mPreferences, Constant.PERSONAL_LIST);
+        dataServer.getAddress();
+        dataServer.filterConversation();
+
         setupViewPager(mViewpager);
         setupMenu();
+
     }
 
 
@@ -245,6 +251,6 @@ public class MainActivity extends AppCompatActivity
         Set<String> copy = new HashSet<>(mNotifList);
         Log.d("chekFilterList", String.valueOf(mNotifList));
         Log.d("chekFilterList", String.valueOf(mPersonalList));
-        Log.d("compareListHash","original: " + mNotifList.hashCode() + ",\n copy: " + copy.hashCode());
+//        Log.d("compareListHash","original: " + mNotifList.hashCode() + ",\n copy: " + copy.hashCode());
     }
 }

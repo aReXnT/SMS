@@ -72,6 +72,7 @@ public class SmsBroadcastReceiver extends BroadcastReceiver{
                     if (!(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)) {
                         smsMessage.save();
                     }
+
                     mIntent = new Intent(context, ToastService.class);
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("message", smsMessage);

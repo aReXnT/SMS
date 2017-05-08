@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 
 import static com.arexnt.sms.StaticCaptchaCode.CPATCHAS_KEYWORD;
 import static com.arexnt.sms.StaticCaptchaCode.CPATCHAS_KEYWORD_EN;
+import static com.arexnt.sms.StaticCaptchaCode.DATA_KEYWORD;
 
 public class StringUtils {
 
@@ -34,12 +35,11 @@ public class StringUtils {
         return count;
     }
 
-
     public static String getContentInBracket(String str, String address) {
         Pattern pattern = Pattern.compile("\\【(.*?)\\】");
         Matcher matcher = pattern.matcher(str);
         while (matcher.find()) {
-            if (matcher.group(1) != null && matcher.group(1).length() < 10) {
+            if (matcher.group(1) != null && matcher.group(1).length() < 6) {
 
                 return analyseSpecialCompany(matcher.group(1), str, address);
             }
@@ -47,7 +47,7 @@ public class StringUtils {
         Pattern pattern1 = Pattern.compile("\\[(.*?)\\]");
         Matcher matcher1 = pattern1.matcher(str);
         while (matcher1.find()) {
-            if (matcher1.group(1) != null && matcher1.group(1).length() < 10) {
+            if (matcher1.group(1) != null && matcher1.group(1).length() < 6) {
 
                 return analyseSpecialCompany(matcher1.group(1), str, address);
             }
@@ -55,7 +55,7 @@ public class StringUtils {
         Pattern pattern2 = Pattern.compile("\\((.*?)\\)");
         Matcher matcher2 = pattern2.matcher(str);
         while (matcher2.find()) {
-            if (matcher2.group(1) != null && matcher2.group(1).length() < 10) {
+            if (matcher2.group(1) != null && matcher2.group(1).length() < 6) {
 
                 return analyseSpecialCompany(matcher2.group(1), str, address);
             }
@@ -260,4 +260,17 @@ public class StringUtils {
             return false;
         }
     }
+
+    public static boolean isDataMessage(String content){
+        Boolean isDataMessage = false;
+        for (int i = 0; i < DATA_KEYWORD.length; i++) {
+            if (content.contains(DATA_KEYWORD[i])) {
+                isDataMessage = true;
+                break;
+            }
+        }
+        return isDataMessage;
+    }
+
+
 }

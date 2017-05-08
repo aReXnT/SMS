@@ -13,6 +13,9 @@ public class Conversation {
     private boolean mIsChecked;
     private String mAddress;
     private int mType;
+    private boolean isData;
+
+
 
     public Conversation(){
 
@@ -147,6 +150,13 @@ public class Conversation {
         this.name = name;
     }
 
+    public boolean isData() {
+        return isData;
+    }
+
+    public void setData(boolean data) {
+        isData = data;
+    }
 
 }
 
