@@ -3,11 +3,13 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
+    <string name="enmpy_conversation">列表为空</string>
     <string name="action_settings">设置</string>
+    <string name="info">关于</string>
     <string name="scale_down_show_behavior">com.arexnt.sms.ui.widget.ScaleDownBehavior</string>
 
     <string name="copy_captcha">验证码：%s 已复制到粘贴板。</string>
+    <string name="notify_msg">当前验证码：%s（点击可复制）</string>
     <string name="personal_fragment">个人</string>
     <string name="notification_fragment">通知</string>
     <string name="captcha_fragment">验证码</string>
@@ -24,6 +26,6 @@
     <!--<string name="sms_captcha_regex">(?<[0-9a-zA-Z])([0-9a-zA-Z]{4,10})(?![0-9a-zA-Z])</string>-->
 
 
-
+    <!--Preference Setting-->
 
 </resources>

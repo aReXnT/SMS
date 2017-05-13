@@ -29,8 +29,11 @@ import com.arexnt.sms.common.DataMessageHelper;
 import com.arexnt.sms.data.Conversation;
 import com.arexnt.sms.data.DataServer;
 import com.arexnt.sms.ui.messagelist.MessageListActivity;
+import com.arexnt.sms.ui.setting.SettingFragment;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static com.arexnt.sms.common.Constant.CONVERSATIONS_CONTENT_PROVIDER;
@@ -52,6 +55,12 @@ public class ConversationFragment extends Fragment implements LoaderManager.Load
     private String mFragmentType;
     private View mDataHeader;
     private View mExpressHeader;
+    private View mEmptyView;
+    private boolean mEnableDataHeader;
+    private boolean mEnableExpressHeader;
+    private SharedPreferences.OnSharedPreferenceChangeListener listener;
+    private ViewGroup mContainer;
+
 
 
     public static ConversationFragment newInstance(String type) {
@@ -66,6 +75,7 @@ public class ConversationFragment extends Fragment implements LoaderManager.Load
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mFragmentType = getArguments().getString(ARG);
+
     }
 
     @Override
@@ -73,6 +83,7 @@ public class ConversationFragment extends Fragment implements LoaderManager.Load
         View view = inflater.inflate(R.layout.conversation_list, container, false);
         mDataHeader = inflater.inflate(R.layout.header_view_data, container ,false);
         mExpressHeader = inflater.inflate(R.layout.header_view_express, container ,false);
+        mEmptyView = inflater.inflate(R.layout.conversation_empty, container, false);
         mRecyclerView = (RecyclerView) view;
         mContext = SMSApp.getContext();
         mPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
@@ -80,6 +91,7 @@ public class ConversationFragment extends Fragment implements LoaderManager.Load
 //        mConversations = mDataServer.getConversation();
         init();
         setHeader();
+        mContainer = container; //只限用在空列表
         mAdapter.setEmptyView(R.layout.loading_view, container);
         getLoaderManager().initLoader(0, null, this);
         return view;
@@ -102,54 +114,77 @@ public class ConversationFragment extends Fragment implements LoaderManager.Load
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
-//        mRecyclerView.addItemDecoration(new DividerItemDecoration(mRecyclerView.getContext(), DividerItemDecoration.VERTICAL));
 
-//        mDataServer = new DataServer(getContext(), mPreferences, mFragmentType);
-//        mDataServer.getAddress();
-//        mDataServer.filterConversation();
+
+        mEnableDataHeader = mPreferences.getBoolean(SettingFragment.KEY_PREF_ENABLE_DATA_CARDVIEW, true);
+        mEnableExpressHeader = mPreferences.getBoolean(SettingFragment.KEY_PREF_ENABLE_EXPRESS_CARDVIEW, true);
+        listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+            @Override
+            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+                if (key.equals(SettingFragment.KEY_PREF_ENABLE_DATA_CARDVIEW))
+                    mEnableDataHeader = sharedPreferences.getBoolean(SettingFragment.KEY_PREF_ENABLE_DATA_CARDVIEW, true);
+                Log.d("StatusOfHeader", "DataCardView: " + String.valueOf(mEnableDataHeader));
+                if (key.equals(SettingFragment.KEY_PREF_ENABLE_EXPRESS_CARDVIEW))
+                    mEnableExpressHeader = sharedPreferences.getBoolean(SettingFragment.KEY_PREF_ENABLE_EXPRESS_CARDVIEW, true);
+                Log.d("StatusOfHeader", "ExpressCardView: " + String.valueOf(mEnableExpressHeader));
+                setHeader();
+            }
+        };
+//        mPreferences.registerOnSharedPreferenceChangeListener(listener);
     }
 
-    public void setHeader(){
-
-        if (mFragmentType == Constant.NOTIF_LIST) {
-            DataServer dataServer = new DataServer(getContext(), mPreferences, Constant.NOTIF_LIST);
-            String testId = dataServer.isContainSP();
-            DataMessageHelper helper = new DataMessageHelper(getContext());
-            ArrayList<String> dataMsgList = new ArrayList<String>(helper.getDataMessageFromId(testId)) {
-            };
-            if (!dataMsgList.isEmpty()){
-
-                TextView tv1 = (TextView) mDataHeader.findViewById(R.id.data1);
-                TextView tv2 = (TextView) mDataHeader.findViewById(R.id.data2);
-                TextView tv3 = (TextView) mDataHeader.findViewById(R.id.data3);
-                TextView tv4 = (TextView) mDataHeader.findViewById(R.id.data4);
-                TextView date = (TextView) mDataHeader.findViewById(R.id.data_header_date);
-                LinearLayout section2 = (LinearLayout) mDataHeader.findViewById(R.id.section2);
-                ArrayList<TextView> views = new ArrayList<>();
-                views.add(tv1);
-                views.add(tv2);
-                views.add(tv3);
-                views.add(tv4);
-                views.add(date);
-                if (dataMsgList.size() < 5)
-                    section2.setVisibility(View.GONE);
-                for (int i=0;i<dataMsgList.size()-1;i++){
-                    if (i==dataMsgList.size()-1){
-                        date.setText(dataMsgList.get(i));
-                        break;
-                    }
-                    views.get(i).setText(dataMsgList.get(i));
-                }
-
-                mAdapter.addHeaderView(mDataHeader);
-                mDataHeader.setOnLongClickListener(getCardLongClikeListener());
-            }
-            Log.d("setOfDataMsg", dataMsgList.toString());
-
-            mAdapter.addHeaderView(mExpressHeader);
-            mExpressHeader.setOnLongClickListener(getCardLongClikeListener());
+    public void setDataCardView(){
+        DataServer dataServer = new DataServer(getContext(), mPreferences, Constant.NOTIF_LIST);
+        String testId = dataServer.isContainSP();
+        if (testId == null || testId.isEmpty()){
+            mAdapter.removeHeaderView(mDataHeader);
+            return;
         }
+        DataMessageHelper helper = new DataMessageHelper(getContext());
+        ArrayList<String> dataMsgList = new ArrayList<String>(helper.getDataMessageFromId(testId)){};
+        if (!dataMsgList.isEmpty()){
+            TextView tv1 = (TextView) mDataHeader.findViewById(R.id.data1);
+            TextView tv2 = (TextView) mDataHeader.findViewById(R.id.data2);
+            TextView tv3 = (TextView) mDataHeader.findViewById(R.id.data3);
+            TextView tv4 = (TextView) mDataHeader.findViewById(R.id.data4);
+            TextView date = (TextView) mDataHeader.findViewById(R.id.data_header_date);
+            LinearLayout section2 = (LinearLayout) mDataHeader.findViewById(R.id.section2);
+            ArrayList<TextView> views = new ArrayList<>();
+            views.add(tv1);
+            views.add(tv2);
+            views.add(tv3);
+            views.add(tv4);
+            views.add(date);
+            if (dataMsgList.size() < 5)
+                section2.setVisibility(View.GONE);
+            for (int i=0;i<dataMsgList.size();i++){
+                Log.d("dataCardViewDetail","i : "+ i +", data: "+dataMsgList.get(i));
+                if (i==(dataMsgList.size())){
+                    date.setText(dataMsgList.get(i));
+                    break;
+                }
+                views.get(i).setText(dataMsgList.get(i));
+            }
 
+            mAdapter.addHeaderView(mDataHeader);
+            mDataHeader.setOnLongClickListener(getCardLongClikeListener());
+
+        }
+        Log.d("setOfDataMsg", dataMsgList.toString());
+    }
+
+    public void setExprexxCardView(){
+        mAdapter.addHeaderView(mExpressHeader);
+        mExpressHeader.setOnLongClickListener(getCardLongClikeListener());
+    }
+    public void setHeader(){
+        mAdapter.removeAllHeaderView();
+        mAdapter.removeAllFooterView();
+        if (mFragmentType == Constant.NOTIF_LIST && mEnableDataHeader)
+            setDataCardView();
+
+        if (mFragmentType == Constant.NOTIF_LIST && mEnableExpressHeader)
+            setExprexxCardView();
     }
 
     @Override
@@ -166,14 +201,26 @@ public class ConversationFragment extends Fragment implements LoaderManager.Load
         mDataServer.getAddress();
         mDataServer.filterConversation();
         mConversations = mDataServer.getConversation();
-        mAdapter.setNewData(mConversations);
+        if (mConversations.size() != 0){
+            mAdapter.setNewData(mConversations);
+        }else{
+            mAdapter.setEmptyView(mEmptyView);
+        }
+
 //        mAdapter.notifyDataSetChanged();
 //        mRecyclerView.setAdapter(mAdapter);
+        setHeader();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss:SSS");
+        Date curDate = new Date(System.currentTimeMillis());
+        String time = dateFormat.format(curDate);
+        Log.d("end runing time: ",time);
+
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mDataServer = null;
+
     }
 
     private View.OnLongClickListener getCardLongClikeListener(){
@@ -200,5 +247,17 @@ public class ConversationFragment extends Fragment implements LoaderManager.Load
 
     public void smoothScrollToTop(){
         mRecyclerView.smoothScrollToPosition(0);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mPreferences.registerOnSharedPreferenceChangeListener(listener);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPreferences.unregisterOnSharedPreferenceChangeListener(listener);
     }
 }

@@ -24,9 +24,10 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
 
+            <intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <action android:name="android.intent.action.SENDTO" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -54,6 +55,12 @@
 
         <service android:name=".service.ToastService"/>
 
+        <receiver android:name=".service.ClearReceiver">
+            <intent-filter>
+                <action android:name="com.arexnt.sms.intent.action.NotificationClick"/>
+            </intent-filter>
+        </receiver>
+        <!--SMS相关-->
         <!-- Service that delivers messages from the phone "quick response" -->
         <service android:name=".service.HeadlessSmsSendService"
                  android:permission="android.permission.SEND_RESPOND_VIA_MESSAGE"

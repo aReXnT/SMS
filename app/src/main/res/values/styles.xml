@@ -69,5 +69,8 @@
 
     <style name="MyAppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
+    <style name="NotificationContent" parent="android:TextAppearance.Material.Notification"/>
+
+    <style name="NotificationTitle" parent="android:TextAppearance.Material.Notification.Title"/>
 
 </resources>

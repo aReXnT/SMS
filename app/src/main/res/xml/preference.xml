@@ -12,15 +12,14 @@
 
         <SwitchPreference
             android:title="启用流量卡片"
-            android:key="enable_data_cardview"
+            android:key="pref_enable_data_cardview"
             android:defaultValue="true"
             android:summaryOn="开"
             android:summaryOff="关"/>
 
         <SwitchPreference
-
             android:title="启用快递卡片"
-            android:key="enable_express_cardview"
+            android:key="pref_enable_express_cardview"
             android:defaultValue="true"
             android:summaryOn="开"
             android:summaryOff="关"/>

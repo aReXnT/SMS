@@ -21,10 +21,7 @@ import static com.arexnt.sms.ui.messagelist.MessageListActivity.PROJECTION;
 public class DataMessageHelper {
     public String id;
     public Context mContext;
-    public DataMessageHelper(Context context
-//                             String id
-    ){
-//        this.id = id;
+    public DataMessageHelper(Context context){
         this.mContext = context;
     }
 
@@ -46,7 +43,7 @@ public class DataMessageHelper {
                 StringTokenizer stringTokenizer = new StringTokenizer(msgContent,"\r");
                 while (stringTokenizer.hasMoreTokens()){
                     String s = stringTokenizer.nextToken();
-                        Log.d("originalToken",s);
+//                        Log.d("originalToken",s);
                     if (StringUtils.isDataMessage(s)){
                         Matcher m = Pattern.compile("(\\w+\\.\\w+)((MB)?(KB)?(GB)?)").matcher(s);
                         String dataNum = "";
@@ -54,7 +51,7 @@ public class DataMessageHelper {
                             dataNum = m.group();
                         }
                         dataMessage.add(dataNum);
-                        Log.d("isDataTokenizer",s + ": " + dataNum);
+                        Log.d("isDataTokenizer",s + ", Data is: " + dataNum);
                     }
                 }
                 if (!dataMessage.isEmpty()){

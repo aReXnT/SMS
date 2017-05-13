@@ -10,15 +10,13 @@ import android.view.ViewGroup;
 
 import com.arexnt.sms.R;
 
-/**
- * Created by arexnt on 2017/5/2.
- */
-
 public class SettingFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener{
+
+    public static final String KEY_PREF_ENABLE_DATA_CARDVIEW = "pref_enable_data_cardview";
+    public static final String KEY_PREF_ENABLE_EXPRESS_CARDVIEW = "pref_enable_express_cardview";
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
 
     }
 
@@ -32,5 +30,17 @@ public class SettingFragment extends PreferenceFragment implements SharedPrefere
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return super.onCreateView(inflater, container, savedInstanceState);
 
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+//        getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+//        getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
     }
 }

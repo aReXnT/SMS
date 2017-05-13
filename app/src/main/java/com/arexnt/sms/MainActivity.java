@@ -29,12 +29,12 @@ import com.arexnt.sms.ui.base.SmsFragmentPagerAdapter;
 import com.arexnt.sms.ui.captcha.CaptchaListFragment;
 import com.arexnt.sms.ui.conversation.ConversationFragment;
 import com.arexnt.sms.ui.setting.SettingActivity;
+import com.arexnt.sms.ui.setting.SettingFragment;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionYes;
 
-import java.util.HashSet;
+import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         getPermission();
+        PreferenceManager.setDefaultValues(this, R.xml.preference, false);
         check();
     }
 
@@ -110,7 +111,7 @@ public class MainActivity extends AppCompatActivity
         mFab.setOnClickListener(v -> smoothScrollToTop());
 
         //双击标题栏
-        final GestureDetector detector = new GestureDetector(this,
+        GestureDetector detector = new GestureDetector(this,
                 new GestureDetector.SimpleOnGestureListener(){
                     @Override
                     public boolean onDoubleTap(MotionEvent e) {
@@ -190,12 +191,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_setting) {
             Intent intent = new Intent(this, SettingActivity.class);
             startActivity(intent);
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
         }
+
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -235,6 +232,10 @@ public class MainActivity extends AppCompatActivity
 //        Snackbar.make(mDrawerLayout,"获取权限成功",Snackbar.LENGTH_SHORT).show();
         SharedPreferences mPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         DataServer dataServer = new DataServer(getApplicationContext(), mPreferences, Constant.PERSONAL_LIST);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss:SSS");
+//        Date curDate = new Date(System.currentTimeMillis());
+//        String time = dateFormat.format(curDate);
+//        Log.d("start runing time: ",time);
         dataServer.getAddress();
         dataServer.filterConversation();
 
@@ -246,11 +247,18 @@ public class MainActivity extends AppCompatActivity
 
     public void check(){
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        Set<String> mNotifList = preferences.getStringSet(Constant.NOTIF_SENDERS, new HashSet<String>());
-        Set<String> mPersonalList = preferences.getStringSet(Constant.PERSONAL_SENDERS, new HashSet<String>());
-        Set<String> copy = new HashSet<>(mNotifList);
-        Log.d("chekFilterList", String.valueOf(mNotifList));
-        Log.d("chekFilterList", String.valueOf(mPersonalList));
+//        Set<String> mNotifList = preferences.getStringSet(Constant.NOTIF_SENDERS, new HashSet<String>());
+//        Set<String> mPersonalList = preferences.getStringSet(Constant.PERSONAL_SENDERS, new HashSet<String>());
+//        Set<String> copy = new HashSet<>(mNotifList);
+//        Log.d("chekFilterList", String.valueOf(mNotifList));
+//        Log.d("chekFilterList", String.valueOf(mPersonalList));
 //        Log.d("compareListHash","original: " + mNotifList.hashCode() + ",\n copy: " + copy.hashCode());
+
+        boolean dataCardView = preferences.getBoolean(SettingFragment.KEY_PREF_ENABLE_DATA_CARDVIEW, false);
+        boolean expressCardView = preferences.getBoolean(SettingFragment.KEY_PREF_ENABLE_EXPRESS_CARDVIEW, false);
+        Log.d("headerStatus","data: " + dataCardView + "\n express: " + expressCardView);
+
     }
+
+
 }

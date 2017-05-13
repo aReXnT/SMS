@@ -6,9 +6,9 @@ import com.arexnt.sms.model.Message;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.arexnt.sms.StaticCaptchaCode.CPATCHAS_KEYWORD;
-import static com.arexnt.sms.StaticCaptchaCode.CPATCHAS_KEYWORD_EN;
-import static com.arexnt.sms.StaticCaptchaCode.DATA_KEYWORD;
+import static com.arexnt.sms.common.StaticCaptchaCode.CPATCHAS_KEYWORD;
+import static com.arexnt.sms.common.StaticCaptchaCode.CPATCHAS_KEYWORD_EN;
+import static com.arexnt.sms.common.StaticCaptchaCode.DATA_KEYWORD;
 
 public class StringUtils {
 

@@ -10,6 +10,7 @@ import android.util.Log;
 import com.arexnt.sms.R;
 import com.arexnt.sms.model.Message;
 import com.arexnt.sms.utils.ClipboardUtils;
+import com.arexnt.sms.utils.NotificationUtils;
 import com.arexnt.sms.utils.ToastUtils;
 
 
@@ -36,6 +37,7 @@ public class ToastService extends Service {
 //                        Toast.LENGTH_SHORT);
                 ClipboardUtils.putTextIntoClipboard(ToastService.this, message.getCaptchas());
                 ToastUtils.showLong(String.format(getResources().getString(R.string.copy_captcha), message.getCaptchas()));
+                NotificationUtils.showMessageInNotificationBar(ToastService.this, message);
             }
         }
         return START_STICKY;
