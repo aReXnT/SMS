@@ -2,8 +2,6 @@ package com.arexnt.sms;
 
 import android.content.Context;
 
-import com.squareup.leakcanary.LeakCanary;
-
 import org.litepal.LitePal;
 import org.litepal.LitePalApplication;
 
@@ -18,7 +16,7 @@ public class SMSApp extends LitePalApplication{
     public void onCreate() {
         super.onCreate();
         LitePal.initialize(this);
-        LeakCanary.install(this);
+//        LeakCanary.install(this);
         context = getApplicationContext();
 //        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss:SSS");
 //        Date curDate = new Date(System.currentTimeMillis());

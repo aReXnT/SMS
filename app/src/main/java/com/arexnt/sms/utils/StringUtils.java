@@ -183,6 +183,12 @@ public class StringUtils {
         return isNearToKeyWord;
     }
 
+    /**
+     * 检查验证码的位置是否在标识文本“验证码附近”
+     * @param currentStr 验证码的具体数字或英文
+     * @param content 短信文本
+     * @return
+     */
     public static boolean isNearToKeyWord(String currentStr, String content) {
         int startPosition = 0;
         int endPosition = content.length() - 1;

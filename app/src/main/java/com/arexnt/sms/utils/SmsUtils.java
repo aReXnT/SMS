@@ -6,7 +6,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 
-import com.arexnt.sms.common.BlockedConversationHelper;
 import com.arexnt.sms.common.Constant;
 import com.arexnt.sms.model.Message;
 
@@ -16,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 
 public class SmsUtils {
     Context mContext;
@@ -29,15 +29,15 @@ public class SmsUtils {
     public static final Uri ALL_MESSAGE_URI = MMSSMS_ALL_MESSAGE_URI.buildUpon().
             appendQueryParameter("simple", "true").build();
 
-    private static final String[] ALL_THREADS_PROJECTION = {
+    public static final String[] SMS_THREADS_PROJECTION = {
             "_id", "address", "person", "body",
             "date", "type", "thread_id"};
 
     public List<Message> getAllCaptchMessages() {
         List<String> dateGroups = new ArrayList<>();
         ContentResolver contentResolver = mContext.getContentResolver();
-        BlockedConversationHelper helper = new BlockedConversationHelper(null);
-        Cursor cursor = contentResolver.query(ALL_MESSAGE_URI, ALL_THREADS_PROJECTION,
+//        BlockedConversationHelper helper = new BlockedConversationHelper(null);
+        Cursor cursor = contentResolver.query(ALL_MESSAGE_URI, SMS_THREADS_PROJECTION,
                 null, null, "date desc");
         List<Message> smsMessages = new ArrayList<>();
         if (cursor.moveToFirst()){

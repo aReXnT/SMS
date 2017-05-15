@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
@@ -26,14 +27,17 @@ import com.arexnt.sms.R;
 import com.arexnt.sms.SMSApp;
 import com.arexnt.sms.common.Constant;
 import com.arexnt.sms.common.DataMessageHelper;
+import com.arexnt.sms.common.ExpressMessageHelper;
 import com.arexnt.sms.data.Conversation;
 import com.arexnt.sms.data.DataServer;
 import com.arexnt.sms.ui.messagelist.MessageListActivity;
 import com.arexnt.sms.ui.setting.SettingFragment;
+import com.arexnt.sms.utils.TaskUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.arexnt.sms.common.Constant.CONVERSATIONS_CONTENT_PROVIDER;
@@ -55,6 +59,7 @@ public class ConversationFragment extends Fragment implements LoaderManager.Load
     private String mFragmentType;
     private View mDataHeader;
     private View mExpressHeader;
+    private HashMap expressData;
     private View mEmptyView;
     private boolean mEnableDataHeader;
     private boolean mEnableExpressHeader;
@@ -75,7 +80,7 @@ public class ConversationFragment extends Fragment implements LoaderManager.Load
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mFragmentType = getArguments().getString(ARG);
-
+        getLoaderManager().initLoader(Constant.LOADER_CONVERSATIONS, null, this);
     }
 
     @Override
@@ -93,7 +98,6 @@ public class ConversationFragment extends Fragment implements LoaderManager.Load
         setHeader();
         mContainer = container; //只限用在空列表
         mAdapter.setEmptyView(R.layout.loading_view, container);
-        getLoaderManager().initLoader(0, null, this);
         return view;
     }
 
@@ -121,13 +125,16 @@ public class ConversationFragment extends Fragment implements LoaderManager.Load
         listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                if (key.equals(SettingFragment.KEY_PREF_ENABLE_DATA_CARDVIEW))
+                if (key.equals(SettingFragment.KEY_PREF_ENABLE_DATA_CARDVIEW)){
                     mEnableDataHeader = sharedPreferences.getBoolean(SettingFragment.KEY_PREF_ENABLE_DATA_CARDVIEW, true);
+                }
                 Log.d("StatusOfHeader", "DataCardView: " + String.valueOf(mEnableDataHeader));
-                if (key.equals(SettingFragment.KEY_PREF_ENABLE_EXPRESS_CARDVIEW))
+                if (key.equals(SettingFragment.KEY_PREF_ENABLE_EXPRESS_CARDVIEW)){
                     mEnableExpressHeader = sharedPreferences.getBoolean(SettingFragment.KEY_PREF_ENABLE_EXPRESS_CARDVIEW, true);
+                }
                 Log.d("StatusOfHeader", "ExpressCardView: " + String.valueOf(mEnableExpressHeader));
                 setHeader();
+                scrollToTop();
             }
         };
 //        mPreferences.registerOnSharedPreferenceChangeListener(listener);
@@ -173,18 +180,53 @@ public class ConversationFragment extends Fragment implements LoaderManager.Load
         Log.d("setOfDataMsg", dataMsgList.toString());
     }
 
-    public void setExprexxCardView(){
-        mAdapter.addHeaderView(mExpressHeader);
-        mExpressHeader.setOnLongClickListener(getCardLongClikeListener());
+    public void setExpressCardView(){
+        ExpressMessageHelper helper = new ExpressMessageHelper(getContext(), mPreferences);
+        expressData = new HashMap();
+        TaskUtils.execute(new AsyncTask<Object, Object, Object>() {
+            @Override
+            protected Object doInBackground(Object... params) {
+                expressData = helper.getExpressMessage();
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Object o) {
+                super.onPostExecute(o);
+                if (!expressData.isEmpty()){
+                    TextView date = (TextView) mExpressHeader.findViewById(R.id.express_date);
+                    TextView lockerTitle = (TextView) mExpressHeader.findViewById(R.id.locker_packet_code_title);
+                    TextView codeTitle = (TextView) mExpressHeader.findViewById(R.id.packet_code_title);
+                    TextView company = (TextView) mExpressHeader.findViewById(R.id.express_company);
+                    TextView code = (TextView) mExpressHeader.findViewById(R.id.packet_code);
+                    date.setText((String)expressData.get("date"));
+                    if ((boolean)expressData.get("isInLocker")){
+                        lockerTitle.setVisibility(View.VISIBLE);
+                    }else
+                        codeTitle.setVisibility(View.VISIBLE);
+                    code.setText((String)expressData.get("code"));
+                    company.setText((String)expressData.get("company"));
+                    mAdapter.addHeaderView(mExpressHeader);
+                    mExpressHeader.setOnLongClickListener(getCardLongClikeListener());
+                    Log.d("ExpressCard",expressData.toString());
+                }
+            }
+        });
+
+
     }
+
     public void setHeader(){
         mAdapter.removeAllHeaderView();
-        mAdapter.removeAllFooterView();
-        if (mFragmentType == Constant.NOTIF_LIST && mEnableDataHeader)
+        mAdapter.notifyDataSetChanged();
+        if (mFragmentType == Constant.NOTIF_LIST && mEnableDataHeader){
             setDataCardView();
-
-        if (mFragmentType == Constant.NOTIF_LIST && mEnableExpressHeader)
-            setExprexxCardView();
+            mAdapter.notifyDataSetChanged();
+        }
+        if (mFragmentType == Constant.NOTIF_LIST && mEnableExpressHeader) {
+            setExpressCardView();
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override

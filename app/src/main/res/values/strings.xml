@@ -17,9 +17,10 @@
     <string name="message_sample">温馨提示：截止02月30日24时，您当前月累计使用流量2.333GB。其中：【省内流量】已使用666.66MB。点击进入 http://wap.10010.com 查询详情。</string>
 
     <string name="customTitle1">中国联通</string>
+
     <string name="express_card_title">菜鸟驿站取件提示</string>
     <string name="packet_code_title">提货码</string>
-    <string name="self_packet_code_title">自提柜提货码</string>
+    <string name="locker_packet_code_title">自提柜提货码</string>
     <string name="title_activity_main2">设置</string>
 
     <string name="sms_tigger_regex">(是|为|:|：| |G-|is|)+(:|：|G-|\[|【| |)</string>

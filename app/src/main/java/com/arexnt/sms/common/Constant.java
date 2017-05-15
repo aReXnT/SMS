@@ -11,8 +11,7 @@ public class Constant {
     public static final String PERSONAL_SENDERS = "pref_key_personal_senders";
     public static final String BLOCKED_SENDERS = "pref_key_blocked_senders";
     public static final String NOTIF_SENDERS = "pref_key_notif_senders";
-    public static final String FIRST_BOOT = "pref_key_first_boot";
-    public static final String LATEST_LIST_HASH = "pref_key_latest_conversation_addr_list_hash_code";
+    public static final String KEY_ENABLE_AUTO_COPY = "auto_copy_captcha";
 
     //MMS-SMS URI
     public static final Uri ALL_CONVERSATION = Uri.parse("content://mms-sms/conversations");
@@ -38,10 +37,21 @@ public class Constant {
     public static final int isMessage_in = 2;
     public static final int isMessage_out = 3;
 
-    public static final int LOADER_MESSAGES = 1;
     public static final int LOADER_CONVERSATIONS = 0;
+    public static final int LOADER_MESSAGES = 1;
+    public static final int LOADER_CAPTCHA = 2;
+
     //Permission Code
     public static final int REQUEST_CODE_PERMISSION_READ_SMS_AND_CONTACT = 100;
+
+    //
+    public static final String EXPRESS_COMPANY = "pref_key_express_company";
+    public static final String EXPRESS_DISAMBIGUATION = "pref_key_express_disambiguation";
+
+
+    //RE
+    public static final String RE_EXPRESS_COMPANY_KEYWORD = "其他|圆通|中通|顺丰|韵达|百世|天天";
+    public static final String RE_EXPRESS_DISAMBIGUATION = "自提";
 
 
 

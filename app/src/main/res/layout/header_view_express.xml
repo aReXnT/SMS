@@ -18,14 +18,33 @@
         android:background="@drawable/card_bg"
         android:foreground="?selectableItemBackground">
 
-        <TextView
-            android:id="@+id/express_card_title"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            style="@style/TextPrimary"
-            android:text="@string/express_card_title"
-            />
+            android:orientation="horizontal"
+            android:animateLayoutChanges="true">
+            <TextView
+                android:id="@+id/express_card_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                style="@style/TextPrimary"
+                android:text="@string/express_card_title"
+                />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:minWidth="16dp" />
+            <TextView
+                android:id="@+id/express_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                style="@style/TextTertiary"
+                android:text="123"/>
+        </LinearLayout>
+
         <TextView
             android:id="@+id/packet_code_title"
             android:layout_width="wrap_content"
@@ -33,16 +52,24 @@
             style="@style/TextSecondary"
             android:text="@string/packet_code_title"
             android:layout_gravity="center"
+            android:visibility="gone"
             />
         <TextView
-            android:id="@+id/self_packet_code_title"
+            android:id="@+id/locker_packet_code_title"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             style="@style/TextSecondary"
-            android:text="@string/self_packet_code_title"
+            android:text="@string/locker_packet_code_title"
             android:layout_gravity="center"
             android:visibility="gone"
             />
+        <TextView
+            android:id="@+id/express_company"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="comany"
+            style="@style/TextSecondary"/>
         <TextView
             android:id="@+id/packet_code"
             android:layout_width="wrap_content"
@@ -50,13 +77,6 @@
             android:layout_gravity="center"
             style="@style/TextPrimary"
             android:text="123456"/>
-
-
-
-
-
-
-
 
     </LinearLayout>
 

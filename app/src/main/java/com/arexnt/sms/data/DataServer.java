@@ -177,6 +177,7 @@ public class DataServer {
 
         for(int i = 0; i < mAddrRow.size(); i++){
             int id = mAddrRow.keyAt(i);
+
             String addr = mAddrRow.get(id);
             if (Pattern.matches(pattern,addr)){
                 newNotifList.add(String.valueOf(id));

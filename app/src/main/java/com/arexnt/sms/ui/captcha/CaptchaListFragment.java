@@ -1,10 +1,14 @@
 package com.arexnt.sms.ui.captcha;
 
+import android.database.Cursor;
 import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -25,8 +29,12 @@ import org.litepal.crud.DataSupport;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.arexnt.sms.utils.SmsUtils.ALL_MESSAGE_URI;
 
-public class CaptchaListFragment extends Fragment implements CaptchasListAdapter.OnItemClickListener{
+
+public class CaptchaListFragment extends Fragment
+        implements CaptchasListAdapter.OnItemClickListener,
+        LoaderManager.LoaderCallbacks<Cursor> {
 
     private RecyclerView mRecyclerView;
     private List<Message> mMessages;
@@ -38,7 +46,7 @@ public class CaptchaListFragment extends Fragment implements CaptchasListAdapter
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        getLoaderManager().initLoader(Constant.LOADER_CAPTCHA, null, this);
     }
 
     @Override
@@ -46,7 +54,7 @@ public class CaptchaListFragment extends Fragment implements CaptchasListAdapter
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.captcha_list, container, false);
         mRecyclerView = (RecyclerView) view;
-        getAllMessage();
+//        getAllMessage();
         setAdapter();
         return view;
     }
@@ -106,10 +114,9 @@ public class CaptchaListFragment extends Fragment implements CaptchasListAdapter
     }
 
 
-
-    public void setAvatar(){
+    public void setAvatar() {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.captcha_item, null);
-        TextView mAvatar = (TextView)view.findViewById(R.id.avatar_tv);
+        TextView mAvatar = (TextView) view.findViewById(R.id.avatar_tv);
         GradientDrawable drawable = (GradientDrawable) mAvatar.getBackground();
         drawable.setColor(getResources().getColor(R.color.md_indigo_700));
     }
@@ -153,10 +160,10 @@ public class CaptchaListFragment extends Fragment implements CaptchasListAdapter
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        if (adapter.getItemViewType(position) != Constant.isCaptcha_Sep){
+        if (adapter.getItemViewType(position) != Constant.isCaptcha_Sep) {
             Message captcha = (Message) adapter.getItem(position);
             String captchaStr = captcha.getCaptchas();
-            if(captchaStr != null ){
+            if (captchaStr != null) {
                 ClipboardUtils.putTextIntoClipboard(getContext(), captchaStr);
                 Snackbar.make(getView(),
                         String.format(getResources().getString(R.string.copy_captcha), captchaStr),
@@ -165,11 +172,37 @@ public class CaptchaListFragment extends Fragment implements CaptchasListAdapter
         }
     }
 
-    public void scrollToTop(){
+    public void scrollToTop() {
         mRecyclerView.scrollToPosition(0);
     }
 
-    public void smoothScrollToTop(){
+    public void smoothScrollToTop() {
         mRecyclerView.smoothScrollToPosition(0);
+    }
+
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(getContext(), ALL_MESSAGE_URI, null, null, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        //        getAllMessage();
+        SmsUtils smsUtils = new SmsUtils(getContext());
+        if (mMessages != null) {
+            mMessages.clear();
+            mCurrentCaptchasCount = 0;
+        }
+        mMessages = smsUtils.getAllCaptchMessages();
+        if (mMessages != null && mMessages.size() != 0) {
+            mCurrentCaptchasCount = getMessageCount();
+        }
+        setAdapter();
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 }

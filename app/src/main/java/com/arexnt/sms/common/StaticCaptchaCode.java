@@ -12,5 +12,8 @@ public interface StaticCaptchaCode {
     String[] CPATCHAS_KEYWORD_EN = {"CODE", "code"};
     String ACTION_CLICK = "com.arexnt.sms.intent.action.NotificationClick";
     String[] DATA_KEYWORD = {"总流量", "套餐内剩余流量", "结转流量", "结转剩余流量"};
-    String[] EXPRESS_KEYWORD = {"其他","圆通","中通","顺丰","韵达","百世","天天",""};
+    String[] EXPRESS_KEYWORD = {"菜鸟驿站","圆通","中通","顺丰","韵达","百世","天天"};
+
+
+
 }

@@ -2,12 +2,15 @@ package com.arexnt.sms.service;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.arexnt.sms.R;
+import com.arexnt.sms.common.Constant;
 import com.arexnt.sms.model.Message;
 import com.arexnt.sms.utils.ClipboardUtils;
 import com.arexnt.sms.utils.NotificationUtils;
@@ -35,8 +38,12 @@ public class ToastService extends Service {
 //                Toast.makeText(SMSApp.getContext(),
 //                        String.format(getResources().getString(R.string.copy_captcha), message.getCaptchas()),
 //                        Toast.LENGTH_SHORT);
-                ClipboardUtils.putTextIntoClipboard(ToastService.this, message.getCaptchas());
-                ToastUtils.showLong(String.format(getResources().getString(R.string.copy_captcha), message.getCaptchas()));
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                boolean isEnableAutoCopy = preferences.getBoolean(Constant.KEY_ENABLE_AUTO_COPY, true);
+                if (isEnableAutoCopy){
+                    ClipboardUtils.putTextIntoClipboard(ToastService.this, message.getCaptchas());
+                    ToastUtils.showLong(String.format(getResources().getString(R.string.copy_captcha), message.getCaptchas()));
+                }
                 NotificationUtils.showMessageInNotificationBar(ToastService.this, message);
             }
         }
