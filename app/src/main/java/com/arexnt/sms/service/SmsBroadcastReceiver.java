@@ -49,20 +49,30 @@ public class SmsBroadcastReceiver extends BroadcastReceiver{
         mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         if (intent.getExtras() != null) {
             Object[] pdus = (Object[]) intent.getExtras().get("pdus");
-            for (Object p : pdus) {
-                byte[] sms = (byte[]) p;
-                SmsMessage message = SmsMessage.createFromPdu(sms);
-                //获取短信内容
-                mBody = message.getMessageBody();
-                Log.d("msgFromReceiver", mBody);
-                //获取发送时间
-                mDate = message.getTimestampMillis();
-                mAddress = message.getOriginatingAddress();
-                //检查验证码
-                receiveCaptcha();
-                //写入到数据库
-                insertMessage();
+            SmsMessage[] messages = new SmsMessage[pdus.length];
+            for (int i = 0; i < messages.length; i++) {
+                messages[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
             }
+
+            SmsMessage sms = messages[0];
+            if (messages.length == 1 || sms.isReplace()) {
+                mBody = sms.getDisplayMessageBody();
+            } else {
+                StringBuilder bodyText = new StringBuilder();
+                for (SmsMessage message : messages) {
+                    bodyText.append(message.getMessageBody());
+                }
+                mBody = bodyText.toString();
+            }
+
+            Log.d("msgFromReceiver", mBody);
+
+            mAddress = sms.getDisplayOriginatingAddress();
+            mDate = sms.getTimestampMillis();
+            //检查验证码
+            receiveCaptcha();
+            //写入到数据库
+            insertMessage();
         }
 
     }

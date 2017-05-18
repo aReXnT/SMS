@@ -65,6 +65,7 @@
                 android:animateLayoutChanges="true"
                 android:orientation="vertical"
                 android:paddingTop="@dimen/dp_4"
+                android:gravity="center"
                 >
                 <TextView
                     android:layout_width="wrap_content"
@@ -99,7 +100,8 @@
                 android:layout_height="wrap_content"
                 android:animateLayoutChanges="true"
                 android:orientation="vertical"
-                android:paddingTop="@dimen/dp_4">
+                android:paddingTop="@dimen/dp_4"
+                android:gravity="center">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
