@@ -14,6 +14,7 @@ import android.util.SparseArray;
 import com.arexnt.sms.common.BlockedConversationHelper;
 import com.arexnt.sms.common.Constant;
 import com.arexnt.sms.utils.DateFormatter;
+import com.arexnt.sms.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -117,6 +118,10 @@ public class DataServer {
                     }
                     item.setAddress(addr);
                     list.add(item);
+                    String company = StringUtils.getContentInBracket(content, addr);
+                    if (company != null && mConversationType == Constant.NOTIF_LIST) {
+                        item.setCompany(company);
+                    }
                 }while(mCursor.moveToNext());
             }
         }catch (Exception e){

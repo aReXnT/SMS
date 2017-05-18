@@ -26,15 +26,14 @@
             android:paddingTop="4dp">
             <TextView
                 android:id="@+id/avatar_tv"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:gravity="center"
-                android:padding="2dp"
-                android:textColor="@color/white_pure"
                 android:background="@drawable/solid_circle"
                 android:textSize="10sp"
                 android:textStyle="bold"
                 tools:ignore="SmallSp"
+                android:padding="5dp"
                 tools:text="..." />
         </FrameLayout>
 

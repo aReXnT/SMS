@@ -72,7 +72,7 @@
                     android:text="累计已用"
                     style="@style/TextQuaternary"/>
                 <TextView
-                    android:id="@+id/data1"
+                    android:id="@+id/data_total_used"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0.0MB"
@@ -84,7 +84,7 @@
                     android:text="套餐内剩余"
                     style="@style/TextQuaternary"/>
                 <TextView
-                    android:id="@+id/data2"
+                    android:id="@+id/data_surplus_in_plan"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0.0MB"
@@ -106,7 +106,7 @@
                     android:text="结转流量已用"
                     style="@style/TextQuaternary"/>
                 <TextView
-                    android:id="@+id/data3"
+                    android:id="@+id/data_remain_use"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0.0MB"
@@ -118,7 +118,7 @@
                     android:text="结转流量剩余"
                     style="@style/TextQuaternary"/>
                 <TextView
-                    android:id="@+id/data4"
+                    android:id="@+id/data_remain_surplus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0.0MB"

@@ -16,6 +16,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,16 +36,17 @@ import com.arexnt.sms.ui.setting.SettingFragment;
 import com.arexnt.sms.utils.TaskUtils;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import static com.arexnt.sms.common.Constant.CONVERSATIONS_CONTENT_PROVIDER;
 import static com.arexnt.sms.common.Constant.DEFAULT_SORT_ORDER;
+import static com.arexnt.sms.common.StaticCaptchaCode.DATA_KEYWORD;
 import static com.arexnt.sms.data.DataServer.ALL_THREADS_PROJECTION;
 
-public class ConversationFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class ConversationFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
+        SharedPreferences.OnSharedPreferenceChangeListener{
 
     public static final String TAG = "ConversationFragment";
     public static final String ARG = "FragmentType";
@@ -60,13 +62,11 @@ public class ConversationFragment extends Fragment implements LoaderManager.Load
     private View mDataHeader;
     private View mExpressHeader;
     private HashMap expressData;
+    private HashMap dataMsgList;
     private View mEmptyView;
     private boolean mEnableDataHeader;
     private boolean mEnableExpressHeader;
-    private SharedPreferences.OnSharedPreferenceChangeListener listener;
     private ViewGroup mContainer;
-
-
 
     public static ConversationFragment newInstance(String type) {
         Bundle args = new Bundle();
@@ -113,71 +113,91 @@ public class ConversationFragment extends Fragment implements LoaderManager.Load
                 MessageListActivity.launch(getContext(), id, addr);
         });
 
-
         //set up recyclerview
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
 
-
         mEnableDataHeader = mPreferences.getBoolean(SettingFragment.KEY_PREF_ENABLE_DATA_CARDVIEW, true);
         mEnableExpressHeader = mPreferences.getBoolean(SettingFragment.KEY_PREF_ENABLE_EXPRESS_CARDVIEW, true);
-        listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-            @Override
-            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                if (key.equals(SettingFragment.KEY_PREF_ENABLE_DATA_CARDVIEW)){
-                    mEnableDataHeader = sharedPreferences.getBoolean(SettingFragment.KEY_PREF_ENABLE_DATA_CARDVIEW, true);
-                }
-                Log.d("StatusOfHeader", "DataCardView: " + String.valueOf(mEnableDataHeader));
-                if (key.equals(SettingFragment.KEY_PREF_ENABLE_EXPRESS_CARDVIEW)){
-                    mEnableExpressHeader = sharedPreferences.getBoolean(SettingFragment.KEY_PREF_ENABLE_EXPRESS_CARDVIEW, true);
-                }
-                Log.d("StatusOfHeader", "ExpressCardView: " + String.valueOf(mEnableExpressHeader));
-                setHeader();
-                scrollToTop();
-            }
-        };
-//        mPreferences.registerOnSharedPreferenceChangeListener(listener);
+
+        mPreferences.registerOnSharedPreferenceChangeListener(this);
     }
 
     public void setDataCardView(){
         DataServer dataServer = new DataServer(getContext(), mPreferences, Constant.NOTIF_LIST);
+        dataMsgList = new HashMap();
         String testId = dataServer.isContainSP();
         if (testId == null || testId.isEmpty()){
             mAdapter.removeHeaderView(mDataHeader);
             return;
         }
         DataMessageHelper helper = new DataMessageHelper(getContext());
-        ArrayList<String> dataMsgList = new ArrayList<String>(helper.getDataMessageFromId(testId)){};
-        if (!dataMsgList.isEmpty()){
-            TextView tv1 = (TextView) mDataHeader.findViewById(R.id.data1);
-            TextView tv2 = (TextView) mDataHeader.findViewById(R.id.data2);
-            TextView tv3 = (TextView) mDataHeader.findViewById(R.id.data3);
-            TextView tv4 = (TextView) mDataHeader.findViewById(R.id.data4);
-            TextView date = (TextView) mDataHeader.findViewById(R.id.data_header_date);
-            LinearLayout section2 = (LinearLayout) mDataHeader.findViewById(R.id.section2);
-            ArrayList<TextView> views = new ArrayList<>();
-            views.add(tv1);
-            views.add(tv2);
-            views.add(tv3);
-            views.add(tv4);
-            views.add(date);
-            if (dataMsgList.size() < 5)
-                section2.setVisibility(View.GONE);
-            for (int i=0;i<dataMsgList.size();i++){
-                Log.d("dataCardViewDetail","i : "+ i +", data: "+dataMsgList.get(i));
-                if (i==(dataMsgList.size())){
-                    date.setText(dataMsgList.get(i));
-                    break;
-                }
-                views.get(i).setText(dataMsgList.get(i));
+        TaskUtils.execute(new AsyncTask<Object, Object, Object>() {
+            @Override
+            protected Object doInBackground(Object... params) {
+                dataMsgList = helper.getDataMessageFromId(testId);
+                return null;
             }
 
-            mAdapter.addHeaderView(mDataHeader);
-            mDataHeader.setOnLongClickListener(getCardLongClikeListener());
+            @Override
+            protected void onPostExecute(Object o) {
+                super.onPostExecute(o);
+                if (!dataMsgList.isEmpty()){
+                    TextView tv1 = (TextView) mDataHeader.findViewById(R.id.data_total_used);
+                    TextView tv2 = (TextView) mDataHeader.findViewById(R.id.data_surplus_in_plan);
+                    TextView tv3 = (TextView) mDataHeader.findViewById(R.id.data_remain_use);
+                    TextView tv4 = (TextView) mDataHeader.findViewById(R.id.data_remain_surplus);
+                    TextView date = (TextView) mDataHeader.findViewById(R.id.data_header_date);
+                    LinearLayout section2 = (LinearLayout) mDataHeader.findViewById(R.id.section2);
+                    Log.d("dataSize", String.valueOf(dataMsgList.size()));
+                    TextView set[] = {tv1,tv2,tv3,tv4};
+                    int count = 0;
+                    for (int i=0; i<DATA_KEYWORD.length; i++){
+                        String vaule = (String) dataMsgList.get(DATA_KEYWORD[i]);
+                        if (vaule != null && !vaule.isEmpty()){
+                            set[i].setText(vaule);
+                            count++;
+                        }
+                    }
+                    if (count<3)
+                        section2.setVisibility(View.GONE);
+                    date.setText((String)dataMsgList.get("date"));
+                    mAdapter.addHeaderView(mDataHeader);
+                    mDataHeader.setOnLongClickListener(getCardLongClikeListener());
+                    mDataHeader.setOnClickListener(getDataCardOnClikListener());
+//                    scrollToTop();
 
-        }
-        Log.d("setOfDataMsg", dataMsgList.toString());
+
+//            ArrayList<TextView> views = new ArrayList<>();
+//            views.add(tv1);
+//            views.add(tv2);
+//            views.add(tv3);
+//            views.add(tv4);
+//            views.add(date);
+//            if (dataMsgList.size() < 5)
+//                section2.setVisibility(View.GONE);
+//            for (int i=0;i<dataMsgList.size();i++){
+//                Log.d("dataCardViewDetail","i : "+ i +", data: "+dataMsgList.get(i));
+//                if (i==(dataMsgList.size())){
+//                    date.setText(dataMsgList.get(i));
+//                    break;
+//                }
+//                views.get(i).setText(dataMsgList.get(i));
+//            }
+
+//                    mAdapter.addHeaderView(mDataHeader);
+//                    mDataHeader.setOnLongClickListener(getCardLongClikeListener());
+//                    scrollToTop();
+
+                }
+                Log.d("setOfDataMsg", dataMsgList.toString());
+            }
+        });
+
+
+
+
     }
 
     public void setExpressCardView(){
@@ -208,6 +228,7 @@ public class ConversationFragment extends Fragment implements LoaderManager.Load
                     company.setText((String)expressData.get("company"));
                     mAdapter.addHeaderView(mExpressHeader);
                     mExpressHeader.setOnLongClickListener(getCardLongClikeListener());
+                    scrollToTop();
                     Log.d("ExpressCard",expressData.toString());
                 }
             }
@@ -216,6 +237,12 @@ public class ConversationFragment extends Fragment implements LoaderManager.Load
 
     }
 
+    /**
+     * bug fix
+     * header状态更新bug
+     * { @link https://github.com/CymChad/BaseRecyclerViewAdapterHelper/issues/1022 }
+     * 解决方法：在每次更新状态时，通知Adapter
+     */
     public void setHeader(){
         mAdapter.removeAllHeaderView();
         mAdapter.notifyDataSetChanged();
@@ -240,8 +267,8 @@ public class ConversationFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mDataServer = new DataServer(getContext(), mPreferences, mFragmentType);
-        mDataServer.getAddress();
-        mDataServer.filterConversation();
+//        mDataServer.getAddress();
+//        mDataServer.filterConversation();
         mConversations = mDataServer.getConversation();
         if (mConversations.size() != 0){
             mAdapter.setNewData(mConversations);
@@ -279,8 +306,11 @@ public class ConversationFragment extends Fragment implements LoaderManager.Load
 
     }
 
-    private View.OnClickListener getCardOnClikListener() {
-        return v -> mAdapter.removeHeaderView(v);
+    private View.OnClickListener getDataCardOnClikListener() {
+        return v -> {
+            sendSMS("10010","CXLL");
+            return;
+        };
     }
 
     public void scrollToTop(){
@@ -294,12 +324,49 @@ public class ConversationFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onPause() {
         super.onPause();
-        mPreferences.registerOnSharedPreferenceChangeListener(listener);
+//        Log.d("FragmentSatus",mFragmentType + "onPause");
+        mPreferences.registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mPreferences.unregisterOnSharedPreferenceChangeListener(listener);
+//        Log.d("FragmentSatus",mFragmentType + "onResume");
+        mPreferences.unregisterOnSharedPreferenceChangeListener(this);
+
     }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        switch (key){
+            case SettingFragment.KEY_PREF_ENABLE_DATA_CARDVIEW:
+                mEnableDataHeader = sharedPreferences.getBoolean(SettingFragment.KEY_PREF_ENABLE_DATA_CARDVIEW, true);
+                setHeader();
+                Log.d(TAG, "StatusOfHeader" + "DataCardView: " + String.valueOf(mEnableDataHeader));
+                break;
+            case SettingFragment.KEY_PREF_ENABLE_EXPRESS_CARDVIEW:
+                mEnableExpressHeader = sharedPreferences.getBoolean(SettingFragment.KEY_PREF_ENABLE_EXPRESS_CARDVIEW, true);
+                setHeader();
+                Log.d(TAG, "StatusOfHeader " + "ExpressCardView: " + String.valueOf(mEnableExpressHeader));
+                break;
+            case Constant.NOTIF_SENDERS:
+            case Constant.PERSONAL_SENDERS:
+                getLoaderManager().restartLoader(Constant.LOADER_CONVERSATIONS, null, this);
+                Log.d(TAG,"filter list has been updated!");
+                break;
+        }
+    }
+
+    /**
+     * 直接调用短信接口发短信
+     * @param phoneNumber
+     * @param message
+     */
+    public void sendSMS(String phoneNumber,String message){
+        SmsManager smsManager = SmsManager.getDefault();
+        smsManager.sendTextMessage(phoneNumber, null, message, null,null );
+        Log.d(TAG,"sent message.");
+    }
+
+
 }

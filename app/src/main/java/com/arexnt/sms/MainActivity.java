@@ -34,6 +34,7 @@ import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionYes;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -233,9 +234,9 @@ public class MainActivity extends AppCompatActivity
         SharedPreferences mPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         DataServer dataServer = new DataServer(getApplicationContext(), mPreferences, Constant.PERSONAL_LIST);
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss:SSS");
-//        Date curDate = new Date(System.currentTimeMillis());
-//        String time = dateFormat.format(curDate);
-//        Log.d("start runing time: ",time);
+        Date curDate = new Date(System.currentTimeMillis());
+        String time = dateFormat.format(curDate);
+        Log.d("start runing time: ",time);
         dataServer.getAddress();
         dataServer.filterConversation();
 
@@ -259,6 +260,7 @@ public class MainActivity extends AppCompatActivity
         Log.d("headerStatus","data: " + dataCardView + "\n express: " + expressCardView);
 
     }
+
 
 
 }

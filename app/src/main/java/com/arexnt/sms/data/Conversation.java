@@ -14,8 +14,7 @@ public class Conversation {
     private String mAddress;
     private int mType;
     private boolean isData;
-
-
+    private String company;
 
     public Conversation(){
 
@@ -53,6 +52,7 @@ public class Conversation {
                 ", mAddress='" + mAddress + '\'' +
                 '}';
     }
+
 
     public long getID() {
         return mID;
@@ -156,6 +156,14 @@ public class Conversation {
 
     public void setData(boolean data) {
         isData = data;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
     }
 
 }

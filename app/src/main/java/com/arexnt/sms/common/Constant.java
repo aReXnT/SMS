@@ -50,6 +50,7 @@ public class Constant {
 
 
     //RE
+    public static final String RE_DATA_KEYWORD = "总流量|套餐内剩余流量|结转流量|结转剩余流量";
     public static final String RE_EXPRESS_COMPANY_KEYWORD = "其他|圆通|中通|顺丰|韵达|百世|天天";
     public static final String RE_EXPRESS_DISAMBIGUATION = "自提";
 

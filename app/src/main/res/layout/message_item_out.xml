@@ -7,6 +7,7 @@
     android:layout_height="wrap_content"
     >
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/message_out_layout"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -43,7 +44,6 @@
             android:text="@string/message_sample"
             android:autoLink="all"
             android:linksClickable="true"
-            android:textIsSelectable="true"
             app:layout_constraintTop_toBottomOf="@+id/message_time"
             app:layout_constraintRight_toRightOf="parent"
             />

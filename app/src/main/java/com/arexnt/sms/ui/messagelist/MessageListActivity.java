@@ -97,6 +97,23 @@ public class MessageListActivity extends AppCompatActivity
             mBar.setTitle(mAddr);
             mBar.setDisplayHomeAsUpEnabled(true);
         }
+        mAdapter.setOnItemChildClickListener((adapter, view, position) -> {
+            Message message = (Message) adapter.getItem(position);
+            String smsId = message.getSmsId();
+            Log.d("ItemClick", "SmsId: " + smsId);
+            });
+
+        mAdapter.setOnItemChildLongClickListener((adapter, view, position) -> {
+            Message message = (Message) adapter.getItem(position);
+            String smsId = message.getSmsId();
+            int delNum = deleteSms(smsId);
+            Log.d("ItemLongClickDel", String.valueOf(delNum));
+            return true;
+        });
+    }
+    public int deleteSms(String smsId) {
+        final Uri SMS_URI = Uri.parse("content://sms/");
+        return getContentResolver().delete(SMS_URI, "_id=?", new String[]{smsId});
     }
 
     @Override
@@ -119,13 +136,14 @@ public class MessageListActivity extends AppCompatActivity
             if (data.moveToFirst()) {
                 do{
                     Message message = new Message();
+                    message.setSmsId(data.getString(data.getColumnIndex("_id")));
+                    message.setThreadId(data.getLong(data.getColumnIndex("thread_id")));
                     try {
                         String msgContent = new String(data.getString(data.getColumnIndexOrThrow("body")).getBytes(),"UTF-8");
                         message.setContent(msgContent);
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
-
 
                     long date = data.getLong(data.getColumnIndexOrThrow("date"));
                     message.setReceiveDate(DateFormatter.getMessageTimestamp(getApplicationContext(), date));

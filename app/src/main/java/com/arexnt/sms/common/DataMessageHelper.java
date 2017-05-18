@@ -4,13 +4,12 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.util.Log;
 
 import com.arexnt.sms.utils.DateFormatter;
 import com.arexnt.sms.utils.StringUtils;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,12 +24,12 @@ public class DataMessageHelper {
         this.mContext = context;
     }
 
-    public ArrayList<String> getDataMessageFromId(String id){
+    public HashMap<String,String> getDataMessageFromId(String id){
         ContentResolver contentResolver = mContext.getContentResolver();
         Cursor mAddrCursor = contentResolver.query(Uri.withAppendedPath(MMS_SMS_CONTENT_PROVIDER,
                 String.valueOf(id)),
                 PROJECTION, null, null, "date DESC");
-        ArrayList<String> dataMessage = new ArrayList<>();
+        HashMap<String,String> dataMessage = new HashMap<>();
         if(mAddrCursor.moveToFirst()){
             do{
                 String msgContent = "";
@@ -45,18 +44,24 @@ public class DataMessageHelper {
                     String s = stringTokenizer.nextToken();
 //                        Log.d("originalToken",s);
                     if (StringUtils.isDataMessage(s)){
+//                        Log.d("isDataTokenizer",s);
                         Matcher m = Pattern.compile("(\\w+\\.\\w+)((MB)?(KB)?(GB)?)").matcher(s);
+                        Matcher keyword = Pattern.compile(Constant.RE_DATA_KEYWORD).matcher(s);
                         String dataNum = "";
                         while (m.find()){
                             dataNum = m.group();
                         }
-                        dataMessage.add(dataNum);
-                        Log.d("isDataTokenizer",s + ", Data is: " + dataNum);
+                        String kwStr = "";
+                        while (keyword.find()){
+                            kwStr = keyword.group();
+                        }
+                        dataMessage.put(kwStr, dataNum);
+//                        Log.d("isDataTokenizer",s + "\n keyword:"+ kwStr + " ,Data is: " + dataNum);
                     }
                 }
                 if (!dataMessage.isEmpty()){
                     long date = mAddrCursor.getLong(mAddrCursor.getColumnIndex("date"));
-                    dataMessage.add(DateFormatter.getMessageTimestamp(mContext, date));
+                    dataMessage.put("date", DateFormatter.getMessageTimestamp(mContext, date));
                     break;
                 }
             }while (mAddrCursor.moveToNext());

@@ -27,10 +27,10 @@
 
     <!--<PreferenceCategory android:title="解析验证码">-->
 
-        <!--<EditTextPreference-->
-            <!--android:title="关键字"-->
-            <!--android:defaultValue="123"-->
-            <!--android:key="msg_keyword" />-->
+        <EditTextPreference
+            android:title="关键字"
+            android:defaultValue="123"
+            android:key="msg_keyword" />
 
         <!--<EditTextPreference-->
             <!--android:title="触发字"-->

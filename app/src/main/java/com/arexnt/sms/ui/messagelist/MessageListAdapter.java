@@ -24,11 +24,15 @@ public class MessageListAdapter extends BaseMultiItemQuickAdapter<Message, BaseV
             case Constant.isMessage_in:
                 helper.setText(R.id.in_message_time, item.getReceiveDate());
                 helper.setText(R.id.in_message_content, item.getContent());
+                helper.addOnClickListener(R.id.in_message_content);
+                helper.addOnLongClickListener(R.id.in_message_content);
                 break;
             case Constant.isMessage_out:
                 if (!item.getReceiveDate().isEmpty()){
                     helper.setText(R.id.message_time, item.getReceiveDate());
                     helper.setText(R.id.message_content, item.getContent());
+                    helper.addOnClickListener(R.id.message_content);
+                    helper.addOnLongClickListener(R.id.message_content);
                 }
         }
     }
