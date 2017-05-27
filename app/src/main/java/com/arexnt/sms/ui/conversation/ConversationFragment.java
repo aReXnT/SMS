@@ -14,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.telephony.SmsManager;
@@ -50,6 +51,8 @@ public class ConversationFragment extends Fragment implements LoaderManager.Load
 
     public static final String TAG = "ConversationFragment";
     public static final String ARG = "FragmentType";
+    public static final int DATA_CARD_ID = 123456;
+    public static final int EXPRESS_CARD_ID = 234567;
     public static final int mPersonalTag = 1;
     public static final int mNotifTag = 2;
     private SharedPreferences mPreferences;
@@ -163,10 +166,11 @@ public class ConversationFragment extends Fragment implements LoaderManager.Load
                     if (count<3)
                         section2.setVisibility(View.GONE);
                     date.setText((String)dataMsgList.get("date"));
+                    mDataHeader.setId(DATA_CARD_ID);
                     mAdapter.addHeaderView(mDataHeader);
                     mDataHeader.setOnLongClickListener(getCardLongClikeListener());
                     mDataHeader.setOnClickListener(getDataCardOnClikListener());
-//                    scrollToTop();
+                    scrollToTop();
 
 
 //            ArrayList<TextView> views = new ArrayList<>();
@@ -226,7 +230,9 @@ public class ConversationFragment extends Fragment implements LoaderManager.Load
                         codeTitle.setVisibility(View.VISIBLE);
                     code.setText((String)expressData.get("code"));
                     company.setText((String)expressData.get("company"));
+                    mExpressHeader.setId(EXPRESS_CARD_ID);
                     mAdapter.addHeaderView(mExpressHeader);
+
                     mExpressHeader.setOnLongClickListener(getCardLongClikeListener());
                     scrollToTop();
                     Log.d("ExpressCard",expressData.toString());
@@ -296,7 +302,16 @@ public class ConversationFragment extends Fragment implements LoaderManager.Load
 
         return v -> {
             Snackbar.make(v,"移除该卡片？",Snackbar.LENGTH_LONG)
-                    .setAction("确认", v1 -> mAdapter.removeHeaderView(v))
+                    .setAction("确认", v1 -> {
+                        mAdapter.removeHeaderView(v);
+                        int id = v.getId();
+                        if (id == DATA_CARD_ID){
+                            mPreferences.edit().putBoolean(SettingFragment.KEY_PREF_ENABLE_DATA_CARDVIEW, false).commit();
+                        }
+                        if (id == EXPRESS_CARD_ID){
+                            mPreferences.edit().putBoolean(SettingFragment.KEY_PREF_ENABLE_EXPRESS_CARDVIEW, false).commit();
+                        }
+                    })
                     .show();
 
             Vibrator vibrator=(Vibrator)getContext().getSystemService(Service.VIBRATOR_SERVICE);
@@ -308,7 +323,17 @@ public class ConversationFragment extends Fragment implements LoaderManager.Load
 
     private View.OnClickListener getDataCardOnClikListener() {
         return v -> {
-            sendSMS("10010","CXLL");
+            AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+            dialog.setTitle("刷新短信");
+            dialog.setMessage("发送CXLL到10010");
+            dialog.setNegativeButton("取消", null);
+            dialog.setPositiveButton("确定", (dialog1, which) -> {
+                sendSMS("10010","CXLL");
+                }
+            );
+            dialog.show();
+
+//            sendSMS("10010","CXLL");
             return;
         };
     }

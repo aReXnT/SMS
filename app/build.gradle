@@ -40,11 +40,13 @@ dependencies {
     })
 
     //Open Source Library
-    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.15'
-    compile 'com.jakewharton:butterknife:8.5.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.16'
+    compile 'com.jakewharton:butterknife:8.6.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
     compile 'com.yanzhenjie:permission:1.0.5'
-//    debugCompile 'com.amitshekhar.android:debug-db:1.0.0'
+    debugCompile 'com.amitshekhar.android:debug-db:1.0.0'
+//    compile 'de.psdev.licensesdialog:licensesdialog:1.8.1'
+
 
     //Google Library
     compile 'org.litepal.android:core:1.5.1'

@@ -1,10 +1,11 @@
 <resources>
-    <string name="app_name">短信管理</string>
+    <string name="app_name">短信助手</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="enmpy_conversation">列表为空</string>
     <string name="action_settings">设置</string>
+    <string name="set_default">设为默认短信应用</string>
     <string name="info">关于</string>
     <string name="scale_down_show_behavior">com.arexnt.sms.ui.widget.ScaleDownBehavior</string>
 
@@ -25,8 +26,8 @@
 
     <string name="sms_tigger_regex">(是|为|:|：| |G-|is|)+(:|：|G-|\[|【| |)</string>
     <!--<string name="sms_captcha_regex">(?<[0-9a-zA-Z])([0-9a-zA-Z]{4,10})(?![0-9a-zA-Z])</string>-->
-
-
+    <string name="default_cpatcha_keyword">激活码|动态码|校验码|验证码|确认码|检验码|验证代码|激活代码|校验代码|动态代码|检验代码|确认代码|短信口令|动态密码|交易码|驗證碼|激活碼|動態碼|校驗碼|檢驗碼|驗證代碼|激活代碼|校驗代碼|確認代碼|動態代碼|檢驗代碼|上网密码</string>
+    <string name="default_key_express_company">其他|圆通|中通|顺丰|韵达|百世|天天</string>
     <!--Preference Setting-->
 
 </resources>

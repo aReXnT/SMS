@@ -12,6 +12,7 @@ public class Constant {
     public static final String BLOCKED_SENDERS = "pref_key_blocked_senders";
     public static final String NOTIF_SENDERS = "pref_key_notif_senders";
     public static final String KEY_ENABLE_AUTO_COPY = "auto_copy_captcha";
+    public static final String KEY_ENABLE_CONFIRM_DEL="pref_key_confirm_del";
 
     //MMS-SMS URI
     public static final Uri ALL_CONVERSATION = Uri.parse("content://mms-sms/conversations");
@@ -50,6 +51,8 @@ public class Constant {
 
 
     //RE
+
+    public static final String RE_CAPTCHA_KEYWORD = "激活码|动态码|校验码|验证码|确认码|检验码|验证代码|激活代码|校验代码|动态代码|检验代码|确认代码|短信口令|动态密码|交易码|驗證碼|激活碼|動態碼|校驗碼|檢驗碼|驗證代碼|激活代碼|校驗代碼|確認代碼|動態代碼|檢驗代碼|上网密码";
     public static final String RE_DATA_KEYWORD = "总流量|套餐内剩余流量|结转流量|结转剩余流量";
     public static final String RE_EXPRESS_COMPANY_KEYWORD = "其他|圆通|中通|顺丰|韵达|百世|天天";
     public static final String RE_EXPRESS_DISAMBIGUATION = "自提";

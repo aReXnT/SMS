@@ -10,6 +10,7 @@ import android.provider.Telephony;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -187,20 +188,30 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_info) {
-            setDefaultSmsApp();
-        } else if (id == R.id.nav_setting) {
-            Intent intent = new Intent(this, SettingActivity.class);
-            startActivity(intent);
+        switch (id){
+            case R.id.nav_setting:
+                Intent intent = new Intent(this, SettingActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.nav_set_default:
+                setDefaultSmsApp();
+                break;
+//            case R.id.nav_info:
+//                break;
+            case R.id.nav_exit:
+                finish();
+                break;
+
         }
 
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    private void setDefaultSmsApp(){
+    public void setDefaultSmsApp(){
         String defaultSmsApp = null;
         String currentPn = getPackageName();
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             defaultSmsApp = Telephony.Sms.getDefaultSmsPackage(this);
         }
@@ -208,6 +219,8 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
             intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, currentPn);
             startActivity(intent);
+        }else {
+            Snackbar.make(getWindow().getDecorView(),"已设置为默认短信应用",Snackbar.LENGTH_LONG).show();
         }
     }
 

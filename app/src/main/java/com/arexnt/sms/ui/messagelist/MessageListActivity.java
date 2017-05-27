@@ -7,9 +7,11 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.provider.Telephony;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -107,6 +109,21 @@ public class MessageListActivity extends AppCompatActivity
             Message message = (Message) adapter.getItem(position);
             String smsId = message.getSmsId();
             int delNum = deleteSms(smsId);
+            String defaultSmsApp = null;
+            String currentPn = getPackageName();
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                defaultSmsApp = Telephony.Sms.getDefaultSmsPackage(this);
+            }
+            if (!defaultSmsApp.equals(currentPn)) {
+                Snackbar.make(view,"无法操作！不是默认短信应用！", Snackbar.LENGTH_LONG)
+                        .setAction("现在设置",v -> {
+                            Intent intent = new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
+                            intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, currentPn);
+                            startActivity(intent);
+                        })
+                        .show();
+            }
             Log.d("ItemLongClickDel", String.valueOf(delNum));
             return true;
         });
@@ -193,5 +210,6 @@ public class MessageListActivity extends AppCompatActivity
         }
         return super.onOptionsItemSelected(item);
     }
+
 
 }

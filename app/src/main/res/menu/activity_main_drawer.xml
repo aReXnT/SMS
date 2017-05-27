@@ -21,16 +21,29 @@
             <!--android:title="Tools"/>-->
     <!--</group>-->
 
-    <item android:title="Communicate">
+    <item android:title="">
         <menu>
             <item
                 android:id="@+id/nav_setting"
                 android:icon="@drawable/ic_menu_setting"
                 android:title="@string/action_settings"/>
+            <!--<item-->
+                <!--android:id="@+id/nav_info"-->
+                <!--android:icon="@drawable/ic_menu_info"-->
+                <!--android:title="@string/info"/>-->
             <item
-                android:id="@+id/nav_info"
-                android:icon="@drawable/ic_menu_info"
-                android:title="@string/info"/>
+                android:id="@+id/nav_set_default"
+                android:icon="@drawable/ic_apps_black_24dp"
+                android:title="@string/set_default"/>
+        </menu>
+    </item>
+
+    <item android:title="">
+        <menu>
+            <item
+                android:id="@+id/nav_exit"
+                android:icon="@drawable/ic_exit_to_app_black_24dp"
+                android:title="退出应用"/>
         </menu>
     </item>
 

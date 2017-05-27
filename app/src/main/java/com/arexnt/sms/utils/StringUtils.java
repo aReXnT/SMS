@@ -210,6 +210,7 @@ public class StringUtils {
 
     public static boolean isCaptchasMessage(String content) {
         Boolean isCaptchasMessage = false;
+
         for (int i = 0; i < CPATCHAS_KEYWORD.length; i++) {
             if (content.contains(CPATCHAS_KEYWORD[i])) {
                 isCaptchasMessage = true;

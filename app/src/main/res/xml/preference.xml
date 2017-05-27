@@ -25,44 +25,38 @@
             android:summaryOff="关"/>
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="解析验证码">
+    <!--<PreferenceCategory android:title="验证码选项">-->
 
-        <EditTextPreference
-            android:title="关键字"
-            android:defaultValue="123"
-            android:key="msg_keyword" />
+        <!--<EditTextPreference-->
+            <!--android:title="关键字"-->
+            <!--android:defaultValue="@string/default_cpatcha_keyword"-->
+            <!--android:summary="解析验证码所需关键字"-->
+            <!--android:key="msg_keyword" />-->
 
         <!--<EditTextPreference-->
             <!--android:title="触发字"-->
             <!--android:defaultValue="123"-->
             <!--android:key="msg_trigger"-->
             <!--/>-->
+    <!--</PreferenceCategory>-->
 
-    </PreferenceCategory>
-
-    <PreferenceCategory android:title="自定义卡片">
-        <SwitchPreference
-            android:title="启用"
-            android:key="enable_custom_card"
-            android:defaultValue="false"/>
+    <PreferenceCategory android:title="快递卡片">
         <EditTextPreference
-            android:title="自定匹配标题"
-            android:key="custom_rg_title"
-            android:summary="提供关键字用于匹配短信"
-            android:defaultValue="@string/customTitle1"/>
-        <PreferenceScreen
-            android:key="custom_rg_option"
-            android:title="自定义选项">
-            <EditTextPreference
-                android:title="关键字"
-                android:key="custom_rg_keyword"
-                android:hint="如：验证码|校验码，使用‘|’分隔关键字"
-                />
-            <EditTextPreference
-                android:title="触发字"
-                android:key="custom_rg_trigger"
-                android:hint="(是|为|:|：|)+(:|：|\[|【|)"/>
-        </PreferenceScreen>
+            android:title="关键字"
+            android:key="pref_key_express_company"
+            android:summary="匹配快递公司的关键字"
+            android:defaultValue="@string/default_key_express_company"/>
+
+        <!--<EditTextPreference-->
+            <!--android:title="关键字"-->
+            <!--android:key="custom_rg_keyword"-->
+            <!--android:hint="如：验证码|校验码，使用‘|’分隔关键字"-->
+            <!--/>-->
+        <!--<EditTextPreference-->
+            <!--android:title="触发字"-->
+            <!--android:key="custom_rg_trigger"-->
+            <!--android:hint="(是|为|:|：|)+(:|：|\[|【|)"/>-->
+
 
 
     </PreferenceCategory>
